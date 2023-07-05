@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface GameRepository extends CrudRepository<Game, Long> {
-    public List<Game> findAllByCode (String code);
+    public List<Game> findAllByCode (String code); //test
 }
