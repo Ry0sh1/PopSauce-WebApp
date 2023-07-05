@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS game(
-    id BIGINT AUTO_INCREMENT,
+    id BIGSERIAL,
     code TEXT,
     host BIGINT,
     primary key (id)
 );
 
 CREATE TABLE IF NOT EXISTS pictures(
-    id BIGINT AUTO_INCREMENT,
+    id BIGSERIAL,
     content TEXT,
     category TEXT,
     game_id BIGINT,
@@ -14,12 +14,10 @@ CREATE TABLE IF NOT EXISTS pictures(
 );
 
 CREATE TABLE IF NOT EXISTS player(
-    id BIGINT AUTO_INCREMENT,
+    id BIGSERIAL,
     username TEXT,
     game_id BIGINT,
     primary key (id)
 );
 
 ALTER TABLE game ADD FOREIGN KEY (host) REFERENCES player(id);
-ALTER TABLE pictures ADD FOREIGN KEY (game_id) REFERENCES game(id);
-ALTER TABLE player ADD FOREIGN KEY (game_id) REFERENCES game(id);
