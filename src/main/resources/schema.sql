@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS game(
 
 CREATE TABLE IF NOT EXISTS pictures(
     id BIGSERIAL,
-    content TEXT,
+    content bytea,
     category TEXT,
     game_id BIGINT,
     primary key (id)

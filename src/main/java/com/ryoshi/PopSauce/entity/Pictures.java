@@ -16,7 +16,7 @@ public class Pictures {
     @Id
     private Long id;
     private String category;
-    private String content;
+    private byte[] content;
 
 
 }
