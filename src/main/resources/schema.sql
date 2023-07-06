@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS pictures(
     content bytea,
     category TEXT,
     game_id BIGINT,
+    right_guess text,
     primary key (id)
 );
 

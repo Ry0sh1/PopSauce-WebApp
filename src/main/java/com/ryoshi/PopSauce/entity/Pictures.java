@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 @Data
@@ -17,6 +18,7 @@ public class Pictures {
     private Long id;
     private String category;
     private byte[] content;
-
+    @Value("right_guess")
+    private String rightGuess;
 
 }

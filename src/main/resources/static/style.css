@@ -3,3 +3,14 @@
   height: 600px;
   object-fit: contain;
 }
+#anime{
+  text-align: center;
+  font-size: 34px;
+  font-family: Arial,serif;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

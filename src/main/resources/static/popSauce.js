@@ -1,11 +1,14 @@
 let pictures = [];
 let currentIndex = 0;
+const h1Element = document.getElementById('anime')
 
 function displayCurrentPicture() {
     let container = document.getElementById('picture-here');
     container.innerHTML = '';  // Clear existing content
 
-    let buffer = pictures[currentIndex];
+    h1Element.innerText = pictures[currentIndex].rightGuess;
+
+    let buffer = pictures[currentIndex].content;
     let uint8Array = new Uint8Array(buffer);
     let blob = new Blob([uint8Array], { type: 'image/jpg' });
     let imageUrl = URL.createObjectURL(blob);
