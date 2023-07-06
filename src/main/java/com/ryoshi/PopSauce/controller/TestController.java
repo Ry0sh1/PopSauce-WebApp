@@ -1,13 +1,20 @@
 package com.ryoshi.PopSauce.controller;
 
 import com.ryoshi.PopSauce.entity.Pictures;
+import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.PictureRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +41,7 @@ public class TestController {
     private void insertIntoDB(List<File> files, long starting) throws IOException {
 
         for (File file:files) {
-            byte[] imageData = Files.readAllBytes(file.toPath());
+            byte[] imageData = ImageFactory.getImageAsBytes(file);
             Pictures pic = new Pictures(starting,"Testing",imageData);
             pictureRepository.save(pic);
             starting++;
