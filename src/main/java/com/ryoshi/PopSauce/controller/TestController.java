@@ -1,21 +1,14 @@
 package com.ryoshi.PopSauce.controller;
 
+import com.google.gson.Gson;
 import com.ryoshi.PopSauce.entity.Pictures;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.PictureRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +22,17 @@ public class TestController {
     }
 
     @GetMapping("/picture")
-    public byte[] getContent(){
-        long d = (long) Math.floor(Math.random()*8);
-        if (d == 0){
-            d++;
+    public String getContent(){
+        List<Pictures> pic = pictureRepository.findAllByCategory("Testing");
+        System.out.println(pic.size());
+        List<byte[]> picturesAsBytes = new ArrayList<>();
+        for (Pictures picture:pic) {
+            picturesAsBytes.add(picture.getContent());
         }
-        Pictures pic = pictureRepository.findById(d).orElseThrow();
-        return pic.getContent();
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(picturesAsBytes);
+        System.out.println(jsonString);
+        return jsonString;
     }
 
     private void insertIntoDB(List<File> files, long starting) throws IOException {
