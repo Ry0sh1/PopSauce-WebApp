@@ -31,6 +31,7 @@ function start(){
 
 function showResult(){
     h1Element.innerText = pictures[currentIndex].rightGuess.split(',')[0];
+    goButton.classList.add('invisible');
 }
 
 function hideResult(){
@@ -61,6 +62,7 @@ function fetchPictures() {
                 return;
             }
             console.log(pictures.length);
+            shuffle(pictures);
             document.getElementById('start-button').classList.remove('invisible');
         })
         .catch(error => {
@@ -111,4 +113,14 @@ function rightAnswer(){
         }
     }
 }
+
+function shuffle(list){
+    for (let i = 0;i<list.length;i++){
+        let first = list[i];
+        let random = Math.floor(Math.random()*list.length);
+        list[i] = list[random];
+        list[random] = first;
+    }
+}
+
 fetchPictures();
