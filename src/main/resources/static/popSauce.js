@@ -13,6 +13,42 @@ const pointElement = document.getElementById('points');
 const seconds = 15;
 const resultTime = 5;
 
+const settings = {
+    "id":2,
+    "guessTimer":seconds,
+    "resultTimer":resultTime,
+    "category":"testing"
+};
+
+const game = {
+    "id":2,
+    "code":"ABDA",
+    "host":{
+        "id":1,
+        "username":"Ryoshi",
+        "points":0
+    },
+    "actualTimer":15,
+    "actualPicture":pictures[0],
+    "setting": {
+        "id":2,
+        "guessTimer":seconds,
+        "resultTimer":resultTime,
+        "category":"testing"
+    },
+}
+
+fetch('/create-game', {
+    method: 'POST',
+    headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(game)
+})
+
+
+
 function start(){
     //Show Playground
     inputElement.classList.remove('invisible');
@@ -103,7 +139,7 @@ function setTime(time){
 
 function rightAnswer(){
     let result = pictures[currentIndex].rightGuess.toLowerCase().split(',');
-    let input = inputElement.value;
+    let input = inputElement.value.toLowerCase();
     inputElement.value = '';
     for (let i = 0; i < result.length;i++){
         if (input === result[i]){

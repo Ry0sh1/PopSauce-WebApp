@@ -1,11 +1,16 @@
 package com.ryoshi.PopSauce.controller;
 
 import com.google.gson.Gson;
+import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Pictures;
+import com.ryoshi.PopSauce.entity.Player;
+import com.ryoshi.PopSauce.entity.Setting;
 import com.ryoshi.PopSauce.factory.ImageFactory;
+import com.ryoshi.PopSauce.repository.GameRepository;
 import com.ryoshi.PopSauce.repository.PictureRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ryoshi.PopSauce.repository.PlayerRepository;
+import com.ryoshi.PopSauce.repository.SettingRepository;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +21,18 @@ import java.util.List;
 public class TestController {
 
     private final PictureRepository pictureRepository;
+    private final SettingRepository settingRepository;
+    private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
 
-    public TestController(PictureRepository pictureRepository) {
+    public TestController(PictureRepository pictureRepository,
+                          SettingRepository settingRepository,
+                          GameRepository gameRepository,
+                          PlayerRepository playerRepository) {
         this.pictureRepository = pictureRepository;
+        this.settingRepository = settingRepository;
+        this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
     }
 
     @GetMapping("/picture")
@@ -27,6 +41,15 @@ public class TestController {
         Gson gson = new Gson();
         return gson.toJson(pic);
     }
+
+    /*
+    @PostMapping("/create")
+    public void createGame(@RequestBody Game game){
+        playerRepository.save(game.getHost());
+        settingRepository.save(game.getSetting());
+        gameRepository.save(game);
+    }
+     */
 
     @GetMapping("/insert-test-data-into-database")
     public void test(){

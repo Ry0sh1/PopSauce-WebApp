@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+</head>
+<body>
+<form th:action="@{/set-username}" method="post" action="#" th:object="${player}">
+  <div>
+    <label for="username">Select Username:</label>
+    <input id="username" type="text" th:field="*{username}">
+  </div>
+</form>
+<button onclick="createGame()">
+  Create Game
+</button>
+<script src="/home.js"></script>
+</body>
+</html>
