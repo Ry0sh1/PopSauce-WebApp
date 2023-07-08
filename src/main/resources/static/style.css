@@ -63,3 +63,10 @@
   border: none !important;
   font-size: 0 !important;
 }
+.absolute{
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 100px;
+  height: 1000px;
+}

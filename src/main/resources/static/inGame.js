@@ -2,12 +2,13 @@ let pictures = [];
 let currentIndex = 0;
 const h1Element = document.getElementById('anime');
 const timerElement = document.getElementById('timer');
+const player = [localStorage.getItem('username')];
+let playerPoints = [];
 
 //Playground
 const inputElement = document.getElementById('input');
 const inputLabelElement = document.getElementById('input-label');
 const goButton = document.getElementById('go');
-const pointElement = document.getElementById('points');
 
 //Settings
 const seconds = parseInt(document.getElementById('set-guess-timer').innerText);
@@ -18,7 +19,8 @@ function start(){
     inputElement.classList.remove('invisible');
     inputLabelElement.classList.remove('invisible');
     goButton.classList.remove('invisible');
-    pointElement.classList.remove('invisible');
+    document.getElementById('host').classList.remove('invisible');
+    document.getElementById('host').innerText = player[0] + " Points: " + playerPoints[0];
 
     //Remove Start Button
     document.getElementById('start-button').remove();
@@ -71,6 +73,7 @@ function fetchPictures() {
 }
 
 function nextPicture() {
+    refreshPoints();
     if (pictures.length === 0) {
         console.log('No pictures available.');
         return;
@@ -90,6 +93,7 @@ function changeTime(){
         showResult();
         setTime(resultTime);
     }
+    refreshPoints()
     timerElement.innerText = parseInt(getTime())-1;
 }
 
@@ -107,7 +111,8 @@ function rightAnswer(){
     inputElement.value = '';
     for (let i = 0; i < result.length;i++){
         if (input === result[i]){
-            pointElement.innerText = (parseInt(pointElement.innerText) + 10);
+            fetch("/" + player[0] + "/" + 10);
+            getPointsOfPlayer();
             inputLabelElement.classList.add('right-answer');
             goButton.classList.add('invisible');
         }
@@ -123,4 +128,17 @@ function shuffle(list){
     }
 }
 
+function refreshPoints(){
+    document.getElementById('host').innerText = player[0] + " Points: " + playerPoints[0];
+}
+
+function getPointsOfPlayer(){
+    for (let i = 0; i < player.length;i++){
+        fetch("/get-points-of-user/" + player[i])
+            .then(response=>response.text())
+            .then(points => playerPoints[i] = parseInt(points));
+    }
+}
+
 fetchPictures();
+getPointsOfPlayer();

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Pictures;
 import com.ryoshi.PopSauce.entity.Player;
-import com.ryoshi.PopSauce.entity.Setting;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.GameRepository;
 import com.ryoshi.PopSauce.repository.PictureRepository;
@@ -18,17 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class TestController {
+public class NormalRestController {
 
     private final PictureRepository pictureRepository;
     private final SettingRepository settingRepository;
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
 
-    public TestController(PictureRepository pictureRepository,
-                          SettingRepository settingRepository,
-                          GameRepository gameRepository,
-                          PlayerRepository playerRepository) {
+    public NormalRestController(PictureRepository pictureRepository,
+                                SettingRepository settingRepository,
+                                GameRepository gameRepository,
+                                PlayerRepository playerRepository) {
         this.pictureRepository = pictureRepository;
         this.settingRepository = settingRepository;
         this.gameRepository = gameRepository;
@@ -51,7 +50,13 @@ public class TestController {
                 code.append(alphabet[(int) (Math.random()*(alphabet.length))]);
             }
         }while (gameRepository.findByCode(code.toString()).isPresent());
-        playerRepository.save(game.getHost());
+        if (playerRepository.findByUsername(game.getHost().getUsername()) != null){
+            long id = playerRepository.findByUsername(game.getHost().getUsername()).getId();
+            game.getHost().setId(id);
+            playerRepository.save(game.getHost());
+        }else {
+            playerRepository.save(game.getHost());
+        }
         settingRepository.save(game.getSetting());
         game.setCode(code.toString());
         game.setActualTimer(0);
@@ -60,12 +65,24 @@ public class TestController {
         return code.toString();
     }
 
+    @GetMapping("/{username}/{points}")
+    public void addPoints(@PathVariable String username,@PathVariable int points){
+        Player user = playerRepository.findByUsername(username);
+        user.setPoints(user.getPoints() + 10);
+        playerRepository.save(user);
+    }
+
 /*    @PostMapping("/test-create")
     public void createGame(@RequestBody Game game){
         playerRepository.save(game.getHost());
         settingRepository.save(game.getSetting());
         gameRepository.save(game);
     }*/
+
+    @GetMapping("/get-points-of-user/{username}")
+    public String getPoints(@PathVariable String username){
+        return String.valueOf(playerRepository.findByUsername(username).getPoints());
+    }
 
     @GetMapping("/insert-test-data-into-database")
     public void test(){
