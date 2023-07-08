@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+<p class="invisible" id="set-result-timer" th:text="${game.get().getSetting().resultTimer}"></p>
+<p class="invisible" id="set-guess-timer" th:text="${game.get().getSetting().guessTimer}"></p>
 <div class="content">
   <p id="timer"></p>
   <h1 class="low-margin" id="anime"></h1>
@@ -18,6 +20,6 @@
   <button onclick="rightAnswer()" class="invisible" id="go">Go</button>
   <p class="invisible" id="points">0</p>
 </div>
-<script src="/popSauce.js"></script>
+<script src="/js/inGame.js"></script>
 </body>
 </html>

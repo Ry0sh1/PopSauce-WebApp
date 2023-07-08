@@ -5,20 +5,19 @@
   <title>Create-Game</title>
 </head>
 <body>
-<form action="#" th:object="${settings}" th:action="@{/creating}" method="post">
-  <div>
-    <label for="guess-timer">Guess Timer:</label>
-    <input type="text" th:field="*{guessTimer}" id="guess-timer" placeholder="Guess Timer">
-  </div>
-  <div>
-    <label for="result-timer">Result Timer:</label>
-    <input type="text" th:field="*{resultTimer}" id="result-timer" placeholder="Result Timer">
-  </div>
-  <div>
-    <label for="category">Category:</label>
-    <input type="text" th:field="*{category}" id="category" placeholder="Category">
-  </div>
-  <input type="submit">
-</form>
+<div>
+  <label for="guess-timer">Guess Timer:</label>
+  <input type="text" id="guess-timer" placeholder="Guess Timer">
+</div>
+<div>
+  <label for="result-timer">Result Timer:</label>
+  <input type="text" id="result-timer" placeholder="Result Timer">
+</div>
+<div>
+  <label for="category">Category:</label>
+  <input type="text" id="category" placeholder="Category">
+</div>
+<button onclick="setSettings();">Start Game</button>
+<script src="/js/settings.js"></script>
 </body>
 </html>

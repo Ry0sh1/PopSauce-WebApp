@@ -5,15 +5,13 @@
   <title>Home</title>
 </head>
 <body>
-<form th:action="@{/set-username}" method="post" action="#" th:object="${player}">
-  <div>
-    <label for="username">Select Username:</label>
-    <input id="username" type="text" th:field="*{username}">
-  </div>
-</form>
+<div>
+  <label for="input-username">Select Username:</label>
+  <input id="input-username" type="text">
+</div>
 <button onclick="createGame()">
   Create Game
 </button>
-<script src="/home.js"></script>
+<script src="/js/home.js"></script>
 </body>
 </html>

@@ -42,14 +42,30 @@ public class TestController {
         return gson.toJson(pic);
     }
 
-    /*
     @PostMapping("/create")
+    public String createGame(@RequestBody Game game){
+        String[] alphabet = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+        StringBuilder code = new StringBuilder();
+        do{
+            for (int i = 0;i<4;i++){
+                code.append(alphabet[(int) (Math.random()*(alphabet.length))]);
+            }
+        }while (gameRepository.findByCode(code.toString()).isPresent());
+        playerRepository.save(game.getHost());
+        settingRepository.save(game.getSetting());
+        game.setCode(code.toString());
+        game.setActualTimer(0);
+        game.setActualPicture(null);
+        gameRepository.save(game);
+        return code.toString();
+    }
+
+/*    @PostMapping("/test-create")
     public void createGame(@RequestBody Game game){
         playerRepository.save(game.getHost());
         settingRepository.save(game.getSetting());
         gameRepository.save(game);
-    }
-     */
+    }*/
 
     @GetMapping("/insert-test-data-into-database")
     public void test(){

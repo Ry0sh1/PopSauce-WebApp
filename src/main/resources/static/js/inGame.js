@@ -10,44 +10,8 @@ const goButton = document.getElementById('go');
 const pointElement = document.getElementById('points');
 
 //Settings
-const seconds = 15;
-const resultTime = 5;
-
-const settings = {
-    "id":2,
-    "guessTimer":seconds,
-    "resultTimer":resultTime,
-    "category":"testing"
-};
-
-const game = {
-    "id":2,
-    "code":"ABDA",
-    "host":{
-        "id":1,
-        "username":"Ryoshi",
-        "points":0
-    },
-    "actualTimer":15,
-    "actualPicture":pictures[0],
-    "setting": {
-        "id":2,
-        "guessTimer":seconds,
-        "resultTimer":resultTime,
-        "category":"testing"
-    },
-}
-
-fetch('/create-game', {
-    method: 'POST',
-    headers:{
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(game)
-})
-
-
+const seconds = parseInt(document.getElementById('set-guess-timer').innerText);
+const resultTime = parseInt(document.getElementById('set-result-timer').innerText);
 
 function start(){
     //Show Playground
@@ -61,8 +25,8 @@ function start(){
 
     //Start Showing Picture
     nextPicture();
-    let timer = setInterval(changeTime,1000);
-    let getNextPictures = setInterval(nextPicture,1000*(seconds+resultTime));
+    setInterval(changeTime,1000);
+    setInterval(nextPicture,1000*(seconds+resultTime));
 }
 
 function showResult(){
@@ -121,7 +85,7 @@ function nextPicture() {
     displayCurrentPicture();
 }
 
-function changeTime(time){
+function changeTime(){
     if (parseInt(getTime())===0){
         showResult();
         setTime(resultTime);
