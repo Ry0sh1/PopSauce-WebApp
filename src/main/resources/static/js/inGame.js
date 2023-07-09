@@ -5,6 +5,9 @@ let players;
 let username = localStorage.getItem('username');
 const code = window.location.href.slice(window.location.href.length-4,window.location.href.length);
 let currentPictureIndex;
+let started = false;
+let host;
+let alreadySent = false;
 
 //Playground
 const inputElement = document.getElementById('input');
@@ -16,6 +19,7 @@ const seconds = parseInt(document.getElementById('set-guess-timer').innerText);
 const resultTime = parseInt(document.getElementById('set-result-timer').innerText);
 
 function start(){
+    started = true;
     //Show Playground
     inputElement.classList.remove('invisible');
     inputLabelElement.classList.remove('invisible');
@@ -23,6 +27,7 @@ function start(){
 
     //Remove Start Button
     document.getElementById('start-button').remove();
+    document.getElementById('waiting').remove();
 
     //Start Showing Picture
     setInterval(changeTime,1000);
@@ -71,6 +76,9 @@ function changeTime(){
         setTime(resultTime);
     }
     timerElement.innerText = parseInt(getTime())-1;
+    if (host){
+        fetch("/set-current-timer/"+code+"/"+timerElement.innerText);
+    }
 }
 
 function getTime(){
@@ -118,8 +126,33 @@ function getPlayers(){
         });
 }
 
+function getStatus(){
+    fetch("/is-started/" + code)
+        .then(response=>response.text())
+        .then(data => {
+            if (data==='false'){
+                started = false;
+            }else if (data==='true'){
+                started = true;
+                start();
+            }
+        });
+}
+
 function updatingData(){
     getPlayers();
+    if (!alreadySent){
+        if (host){
+            if (started === true){
+                fetch("/started/"+code)
+                    .then(alreadySent=true);
+            }
+        }else {
+            if (started===false){
+                getStatus();
+            }
+        }
+    }
 }
 
 function getCurrentPictureIndex(){
@@ -130,5 +163,26 @@ function getCurrentPictureIndex(){
         });
 }
 
-getCurrentPictureIndex();
-setInterval(updatingData,10); //Put This number up when server is lagging!!!!
+//On Join
+fetch("/get-host/"+code)
+    .then(response=>response.text())
+    .then(data=>{
+        if (username !== data){
+            host = false;
+            document.getElementById('start-button').classList.add('invisible');
+            document.getElementById('waiting').classList.remove('invisible');
+            fetch("/is-started/" + code)
+                .then(response=>response.text())
+                .then(data => {
+                    if (data==='true'){
+                        fetch("/get-current-timer/"+code)
+                            .then(response=>response.text())
+                            .then(data=>setTime(parseInt(data)))
+                    }
+                });
+        }else {
+            host = true;
+        }
+        getCurrentPictureIndex();
+        setInterval(updatingData,10); //Put This number up when server is lagging!!!!
+    })

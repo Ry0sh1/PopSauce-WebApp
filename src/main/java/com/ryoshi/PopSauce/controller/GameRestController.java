@@ -228,6 +228,37 @@ public class GameRestController {
         settingRepository.deleteAll();
     }
 
+    @GetMapping("/is-started/{code}")
+    public String isStarted(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        return String.valueOf(game.isStarted());
+    }
+
+    @GetMapping("/started/{code}")
+    public void started(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        game.setStarted(true);
+        gameRepository.save(game);
+    }
+
+    @GetMapping("/get-host/{code}")
+    public String getHost(@PathVariable String code){
+        return gameRepository.findByCode(code).orElseThrow().getHost().getUsername();
+    }
+
+    @GetMapping("/set-current-timer/{code}/{time}")
+    public void setCurrentTimer(@PathVariable String code, @PathVariable int time){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        game.setCurrentTimer(time);
+        gameRepository.save(game);
+    }
+
+    @GetMapping("/get-current-timer/{code}")
+    public String getCurrentGameTimer(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        return String.valueOf(game.getCurrentTimer());
+    }
+
     private void insertIntoDB(List<File> files, List<String> right_guess) throws IOException {
         int counter = 0;
         for (File file:files) {
