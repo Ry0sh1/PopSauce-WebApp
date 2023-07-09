@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @IdClass(PlayerToGameId.class)
-@Table(name = "players_games")
+@Table(name = "game_players")
 public class PlayerToGame {
 
     @Id

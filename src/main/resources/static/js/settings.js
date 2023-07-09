@@ -1,15 +1,15 @@
-let guessTimer;
-let resultTimer;
+let guessTime;
+let resultTime;
 let category;
 
 function setSettings(){
-    guessTimer = document.getElementById('guess-timer').value;
-    resultTimer = document.getElementById('result-timer').value;
+    guessTime = document.getElementById('guess-timer').value;
+    resultTime = document.getElementById('result-timer').value;
     category = document.getElementById('category').value;
 
     const settings = {
-        "guessTimer":guessTimer,
-        "resultTimer":resultTimer,
+        "guessTimer":guessTime,
+        "resultTimer":resultTime,
         "category":category
     };
 

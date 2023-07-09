@@ -1,13 +1,15 @@
 let currentPicture;
+let nextPicture;
 const h1Element = document.getElementById('anime');
 const timerElement = document.getElementById('timer');
 let players;
 let username = localStorage.getItem('username');
 const code = window.location.href.slice(window.location.href.length-4,window.location.href.length);
-let currentPictureIndex;
 let started = false;
-let host;
 let alreadySent = false;
+let host = false;
+let timer;
+let isShowingResult;
 
 //Playground
 const inputElement = document.getElementById('input');
@@ -15,8 +17,12 @@ const inputLabelElement = document.getElementById('input-label');
 const goButton = document.getElementById('go');
 
 //Settings
-const seconds = parseInt(document.getElementById('set-guess-timer').innerText);
+const guessTime = parseInt(document.getElementById('set-guess-timer').innerText);
 const resultTime = parseInt(document.getElementById('set-result-timer').innerText);
+
+fetchStatus();
+fetchCurrentPicture();
+fetchNextPicture();
 
 function start(){
     started = true;
@@ -24,69 +30,24 @@ function start(){
     inputElement.classList.remove('invisible');
     inputLabelElement.classList.remove('invisible');
     goButton.classList.remove('invisible');
+    document.getElementById('timer').classList.remove('invisible');
 
     //Remove Start Button
     document.getElementById('start-button').remove();
     document.getElementById('waiting').remove();
 
-    //Start Showing Picture
-    setInterval(changeTime,1000);
-    setInterval(nextPicture,1000*(seconds+resultTime));
-    nextPicture();
+    refreshPicture();
 }
 
 function showResult(){
     h1Element.innerText = currentPicture.rightGuess.split(',')[0];
     goButton.classList.add('invisible');
-    currentPictureIndex++;
 }
 
 function hideResult(){
-    h1Element.innerText = '';
-}
-
-function displayCurrentPicture() {
-    let container = document.getElementById('picture-here');
-    container.innerHTML = '';  // Clear existing content
-    let uint8Array = new Uint8Array(currentPicture.content);
-    let blob = new Blob([uint8Array], { type: 'image/jpg' });
-    let imageUrl = URL.createObjectURL(blob);
-    let img = document.createElement('img');
-    img.classList.add("image");
-    img.src = imageUrl;
-    container.appendChild(img);
-}
-
-function nextPicture() {
-    fetch("/next-picture/"+code+"/"+currentPictureIndex)
-        .then(response => response.json())
-        .then(data => {
-            currentPicture = data;
-            goButton.classList.remove('invisible');
-            inputLabelElement.classList.remove('right-answer');
-            hideResult();
-            setTime(seconds);
-            displayCurrentPicture();
-        })
-}
-
-function changeTime(){
-    if (parseInt(getTime())===0){
-        showResult();
-        setTime(resultTime);
-    }
-    timerElement.innerText = parseInt(getTime())-1;
-    if (host){
-        fetch("/set-current-timer/"+code+"/"+timerElement.innerText);
-    }
-}
-
-function getTime(){
-    return timerElement.innerText;
-}
-
-function setTime(time){
-    timerElement.innerText = time;
+    h1Element.innerText = "";
+    goButton.classList.remove('invisible');
+    inputLabelElement.classList.remove('right-answer');
 }
 
 function rightAnswer(){
@@ -117,7 +78,55 @@ function refreshPoints(){
     }
 }
 
-function getPlayers(){
+function refreshPicture() {
+    //Display Current Picture
+    let container = document.getElementById('picture-here');
+    container.innerHTML = '';  // Clear existing content
+    let uint8Array = new Uint8Array(currentPicture.content);
+    let blob = new Blob([uint8Array], {type: 'image/jpg'});
+    let imageUrl = URL.createObjectURL(blob);
+    let img = document.createElement('img');
+    img.classList.add("image");
+    img.src = imageUrl;
+    container.appendChild(img);
+}
+
+function refreshTimer(){
+    if (isShowingResult){
+        timerElement.innerText = timer;
+        if (timer===0){
+            isShowingResult = false;
+            currentPicture = nextPicture;
+            hideResult();
+            refreshPicture();
+        }
+    }else {
+        if (timer-resultTime===0){
+            isShowingResult = true;
+            fetchNextPicture();
+            showResult();
+        }
+        timerElement.innerText = "" + (timer-resultTime);
+    }
+}
+
+function fetchCurrentPicture(){
+    fetch("/get-current-picture/"+code)
+        .then(response=>response.json())
+        .then(data=>{
+            currentPicture = data;
+        })
+}
+
+function fetchNextPicture(){
+    fetch("/get-next-picture/"+code)
+        .then(response=>response.json())
+        .then(data=>{
+            nextPicture = data;
+        })
+}
+
+function fetchPlayers(){
     fetch("/getAllPlayer/" + code)
         .then(response=>response.json())
         .then(data => {
@@ -126,7 +135,7 @@ function getPlayers(){
         });
 }
 
-function getStatus(){
+function fetchStatus(){
     fetch("/is-started/" + code)
         .then(response=>response.text())
         .then(data => {
@@ -139,8 +148,17 @@ function getStatus(){
         });
 }
 
+function fetchTime(){
+    fetch("/get-current-timer/"+code)
+        .then(response=>response.text())
+        .then(data=>{
+            timer = parseInt(data);
+        })
+}
+
 function updatingData(){
-    getPlayers();
+    fetchPlayers();
+    fetchTime();
     if (!alreadySent){
         if (host){
             if (started === true){
@@ -149,40 +167,31 @@ function updatingData(){
             }
         }else {
             if (started===false){
-                getStatus();
+                fetchStatus();
             }
         }
     }
+    refreshPoints();
+    refreshTimer();
 }
 
-function getCurrentPictureIndex(){
-    fetch("/get-current-picture-index/" + code)
-        .then(response=>response.text())
-        .then(data => {
-            currentPictureIndex = parseInt(data);
-        });
-}
 
 //On Join
 fetch("/get-host/"+code)
     .then(response=>response.text())
     .then(data=>{
         if (username !== data){
-            host = false;
             document.getElementById('start-button').classList.add('invisible');
             document.getElementById('waiting').classList.remove('invisible');
             fetch("/is-started/" + code)
                 .then(response=>response.text())
                 .then(data => {
                     if (data==='true'){
-                        fetch("/get-current-timer/"+code)
-                            .then(response=>response.text())
-                            .then(data=>setTime(parseInt(data)))
+                        start();
                     }
                 });
         }else {
             host = true;
         }
-        getCurrentPictureIndex();
-        setInterval(updatingData,10); //Put This number up when server is lagging!!!!
+        setInterval(updatingData,10);
     })

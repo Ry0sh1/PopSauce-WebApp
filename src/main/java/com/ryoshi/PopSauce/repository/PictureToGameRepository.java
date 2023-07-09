@@ -15,4 +15,6 @@ public interface PictureToGameRepository extends CrudRepository<PictureToGame, P
     Optional<PictureToGame> findByGamesAndPlace(Game game, int place);
     Optional<PictureToGame> findByGamesAndPictures(Game game, Pictures picture);
 
+    int findMaxPlaceByGames(Game games);
+
 }

@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS pictures_games(
     place int,
     PRIMARY KEY (pictures_id,games_id)
 );
-CREATE TABLE IF NOT EXISTS players_games(
+CREATE TABLE IF NOT EXISTS game_players(
     players_id BIGINT,
     games_id BIGINT,
     PRIMARY KEY (players_id,games_id)

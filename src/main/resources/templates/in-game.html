@@ -10,7 +10,7 @@
 <p class="invisible" id="set-guess-timer" th:text="${game.get().getSetting().guessTimer}"></p>
 <p class="invisible" id="set-host-username" th:text="${game.get().host.getUsername()}"></p>
 <div class="content">
-  <p id="timer"></p>
+  <p id="timer" class="invisible"></p>
   <h1 class="low-margin" id="anime"></h1>
   <p id="picture-here"></p>
   <button id="start-button" onclick="start()">

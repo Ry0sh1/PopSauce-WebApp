@@ -41,24 +41,25 @@ public class GameRestController {
         this.playerToGameRepository = playerToGameRepository;
     }
 
-    @GetMapping("/next-picture/{code}/{currentPictureIndex}")
-    public String getNextPicture(@PathVariable String code,@PathVariable int currentPictureIndex){
+    @GetMapping("/get-next-picture/{code}")
+    public String getNextPicture(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
-        Pictures currentPicture = pictureToGameRepository.findByGamesAndPlace(game,currentPictureIndex).orElseThrow().getPictures();//TODO: HANDEL OUT OF BOUNDATION EVENT
-        game.setCurrentPicture(currentPicture);
-        gameRepository.save(game);
+        PictureToGame pictureToGame = pictureToGameRepository.findByGamesAndPictures(game,game.getCurrentPicture())
+                .orElseThrow();
+        int pictureToGameListSize = pictureToGameRepository.findAllByGames(game).size();
+        PictureToGame nextPicture;
+        if (pictureToGame.getPlace()+1<pictureToGameListSize){
+            nextPicture = pictureToGameRepository.findByGamesAndPlace(game,pictureToGame.getPlace()+1)
+                    .orElseThrow();
+        }else {
+            nextPicture = pictureToGameRepository.findByGamesAndPlace(game,0)
+                    .orElseThrow();
+        }
         Gson gson = new Gson();
-        return gson.toJson(currentPicture);
+        return gson.toJson(nextPicture.getPictures());
     }
 
-    @GetMapping("/get-current-picture-index/{code}")
-    public String getCurrentPictureIndex(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        return String.valueOf(pictureToGameRepository.findByGamesAndPictures(game,game.getCurrentPicture())
-                .orElseThrow().getPlace());
-    }
-
-    @GetMapping("/current-picture/{code}")
+    @GetMapping("/get-current-picture/{code}")
     public String getCurrentPicture(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
         if (game.getCurrentPicture() == null){
