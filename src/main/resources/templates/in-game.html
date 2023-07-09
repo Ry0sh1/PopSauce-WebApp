@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>PopSauce</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <p class="invisible" id="set-result-timer" th:text="${game.get().getSetting().resultTimer}"></p>
@@ -13,16 +13,14 @@
   <p id="timer"></p>
   <h1 class="low-margin" id="anime"></h1>
   <p id="picture-here"></p>
-  <button id="start-button" class="invisible" onclick="start()">
+  <button id="start-button" onclick="start()">
     Start
   </button>
   <label class="invisible" id="input-label" for="input">Your Guess</label>
   <input class="invisible" id="input" type="text">
   <button onclick="rightAnswer()" class="invisible" id="go">Go</button>
 </div>
-<div class="absolute">
-  <div id="host" class="player invisible"></div>
-</div>
-<script src="/inGame.js"></script>
+<div class="absolute" id="all-player"></div>
+<script src="/js/inGame.js"></script>
 </body>
 </html>

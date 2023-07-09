@@ -1,10 +1,6 @@
 package com.ryoshi.PopSauce.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
@@ -18,33 +14,60 @@ public class Game {
     private String code;
     @OneToOne
     private Player host;
-    @Value("actual_timer")
-    private int actualTimer;
+    @Value("current_timer")
+    private int currentTimer;
     @OneToOne
-    @Value("actual_picture")
-    private Pictures actualPicture;
+    @Value("current_picture")
+    private Pictures currentPicture;
     @OneToOne
     private Setting setting;
+    @OneToMany
+    private List<Player> players;
+    private boolean started;
+    @ManyToMany
+    private List<Pictures> pictures;
 
     public Game(){
 
     }
 
-    public Game(Long id, String code, Player host, int actualTimer, Pictures actualPicture, Setting setting) {
+    public Game(Long id, String code, Player host, int currentTimer, Pictures currentPicture, Setting setting, List<Player> players, boolean started) {
         this.id = id;
         this.code = code;
         this.host = host;
-        this.actualTimer = actualTimer;
-        this.actualPicture = actualPicture;
+        this.currentTimer = currentTimer;
+        this.currentPicture = currentPicture;
         this.setting = setting;
+        this.players = players;
+        this.started = started;
     }
 
-    public Game(String code, Player host, int actualTimer, Pictures actualPicture, Setting setting) {
+    public Game(String code, Player host, int currentTimer, Pictures currentPicture, Setting setting, List<Player> players, boolean started) {
         this.code = code;
         this.host = host;
-        this.actualTimer = actualTimer;
-        this.actualPicture = actualPicture;
+        this.currentTimer = currentTimer;
+        this.currentPicture = currentPicture;
         this.setting = setting;
+        this.players = players;
+        this.started = started;
+    }
+
+
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     public Long getId() {
@@ -71,20 +94,20 @@ public class Game {
         this.host = host;
     }
 
-    public int getActualTimer() {
-        return actualTimer;
+    public int getCurrentTimer() {
+        return currentTimer;
     }
 
-    public void setActualTimer(int actualTimer) {
-        this.actualTimer = actualTimer;
+    public void setCurrentTimer(int currentTimer) {
+        this.currentTimer = currentTimer;
     }
 
-    public Pictures getActualPicture() {
-        return actualPicture;
+    public Pictures getCurrentPicture() {
+        return currentPicture;
     }
 
-    public void setActualPicture(Pictures actualPicture) {
-        this.actualPicture = actualPicture;
+    public void setCurrentPicture(Pictures currentPicture) {
+        this.currentPicture = currentPicture;
     }
 
     public Setting getSetting() {

@@ -9,8 +9,6 @@ import java.util.List;
 @Repository
 public interface PictureRepository extends CrudRepository<Pictures, Long> {
 
-    Pictures findAllByIdAndCategory(Long id, String category);
-
     List<Pictures> findAllByCategory(String category);
 
 }

@@ -1,29 +1,24 @@
 package com.ryoshi.PopSauce.controller;
 
-import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Player;
 import com.ryoshi.PopSauce.entity.Setting;
 import com.ryoshi.PopSauce.repository.GameRepository;
 import com.ryoshi.PopSauce.repository.PlayerRepository;
-import com.ryoshi.PopSauce.repository.SettingRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("")
-public class GameController {
+public class BoardController {
 
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
-    private final SettingRepository settingRepository;
 
-    public GameController(GameRepository gameRepository,
-                          PlayerRepository playerRepository,
-                          SettingRepository settingRepository) {
+    public BoardController(GameRepository gameRepository,
+                           PlayerRepository playerRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
-        this.settingRepository = settingRepository;
     }
 
     @GetMapping("/create-game")
