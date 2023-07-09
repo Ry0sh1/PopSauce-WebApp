@@ -5,6 +5,8 @@ import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGame;
 import com.ryoshi.PopSauce.entity.Pictures;
 import com.ryoshi.PopSauce.entity.Player;
+import com.ryoshi.PopSauce.entity.PlayerToGame.PlayerToGame;
+import com.ryoshi.PopSauce.repository.PlayerToGameRepository;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.*;
 import org.springframework.lang.NonNull;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,17 +25,20 @@ public class GameRestController {
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
     private final PictureToGameRepository pictureToGameRepository;
+    private final PlayerToGameRepository playerToGameRepository;
 
     public GameRestController(PictureRepository pictureRepository,
                               SettingRepository settingRepository,
                               GameRepository gameRepository,
                               PlayerRepository playerRepository,
-                              PictureToGameRepository pictureToGameRepository) {
+                              PictureToGameRepository pictureToGameRepository,
+                              PlayerToGameRepository playerToGameRepository) {
         this.pictureRepository = pictureRepository;
         this.settingRepository = settingRepository;
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.pictureToGameRepository = pictureToGameRepository;
+        this.playerToGameRepository = playerToGameRepository;
     }
 
     @GetMapping("/next-picture/{code}/{currentPictureIndex}")
@@ -118,7 +122,7 @@ public class GameRestController {
         gameRepository.save(game);
 
         //Set Up the host
-        host.setGame(game);
+        playerToGameRepository.save(new PlayerToGame(game,host));
         playerRepository.save(host);
         return code.toString();
     }
@@ -134,7 +138,6 @@ public class GameRestController {
     public void joinGame(@PathVariable String username, @PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
         Player newPlayer = new Player();
-        newPlayer.setGame(game);
         newPlayer.setUsername(username);
         newPlayer.setPoints(0);
         if (playerRepository.findByUsername(username) != null){
@@ -144,6 +147,7 @@ public class GameRestController {
         }else {
             playerRepository.save(newPlayer);
         }
+        playerToGameRepository.save(new PlayerToGame(game,newPlayer));
         game.getPlayers().add(newPlayer);
     }
 
@@ -208,11 +212,11 @@ public class GameRestController {
     @GetMapping("/getAllPlayer/{code}")
     private String getAllPlayer(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
-        List<Player> players = playerRepository.findAllByGame(game);
+        List<PlayerToGame> players = playerToGameRepository.findAllByGames(game);
         StringBuilder json = new StringBuilder();
         json.append("[");
-        for (Player player:players) {
-            json.append("{\"username\":\"").append(player.getUsername()).append("\",\"points\":").append(player.getPoints()).append("},");
+        for (PlayerToGame playerToGame:players) {
+            json.append("{\"username\":\"").append(playerToGame.getPlayers().getUsername()).append("\",\"points\":").append(playerToGame.getPlayers().getPoints()).append("},");
         }
         json.deleteCharAt(json.length()-1);
         json.append("]");

@@ -11,9 +11,6 @@ public class Player {
     private Long id;
     private String username;
     private int points;
-    @ManyToOne
-    @Nullable
-    private Game game;
 
     public Player(Long id, String username, int points) {
         this.id = id;
@@ -27,14 +24,6 @@ public class Player {
     }
 
     public Player() {
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public Long getId() {

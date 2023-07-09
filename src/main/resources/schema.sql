@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS player(
     id BIGSERIAL,
     username TEXT,
     points INT,
-    game_id BIGINT,
     primary key (id)
 );
 CREATE TABLE IF NOT EXISTS setting(
@@ -37,6 +36,13 @@ CREATE TABLE IF NOT EXISTS pictures_games(
     place int,
     PRIMARY KEY (pictures_id,games_id)
 );
+CREATE TABLE IF NOT EXISTS players_games(
+    players_id BIGINT,
+    games_id BIGINT,
+    PRIMARY KEY (players_id,games_id)
+);
 
 ALTER TABLE pictures_games ADD FOREIGN KEY (pictures_id) REFERENCES pictures(id);
 ALTER TABLE pictures_games ADD FOREIGN KEY (games_id) REFERENCES game(id);
+ALTER TABLE players_games ADD FOREIGN KEY (players_id) REFERENCES player(id);
+ALTER TABLE players_games ADD FOREIGN KEY (games_id) REFERENCES game(id);

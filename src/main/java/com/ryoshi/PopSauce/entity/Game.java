@@ -24,9 +24,6 @@ public class Game {
     @OneToMany
     private List<Player> players;
     private boolean started;
-    @ManyToMany
-    private List<Pictures> pictures;
-
     public Game(){
 
     }
@@ -51,8 +48,6 @@ public class Game {
         this.players = players;
         this.started = started;
     }
-
-
 
     public boolean isStarted() {
         return started;
