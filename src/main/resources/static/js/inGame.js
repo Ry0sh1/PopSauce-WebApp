@@ -195,3 +195,8 @@ fetch("/get-host/"+code)
         }
         setInterval(updatingData,10);
     })
+
+
+//TODO: Fix Bug -5
+//TODO: Fix Bug Join
+//TODO: Fix Bug p1_0.game_id existiert nicht

@@ -44,5 +44,5 @@ CREATE TABLE IF NOT EXISTS game_players(
 
 ALTER TABLE pictures_games ADD FOREIGN KEY (pictures_id) REFERENCES pictures(id);
 ALTER TABLE pictures_games ADD FOREIGN KEY (games_id) REFERENCES game(id);
-ALTER TABLE players_games ADD FOREIGN KEY (players_id) REFERENCES player(id);
-ALTER TABLE players_games ADD FOREIGN KEY (games_id) REFERENCES game(id);
+ALTER TABLE game_players ADD FOREIGN KEY (players_id) REFERENCES player(id);
+ALTER TABLE game_players ADD FOREIGN KEY (games_id) REFERENCES game(id);
