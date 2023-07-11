@@ -38,11 +38,11 @@ CREATE TABLE IF NOT EXISTS pictures_games(
 );
 CREATE TABLE IF NOT EXISTS game_players(
     players_id BIGINT,
-    games_id BIGINT,
-    PRIMARY KEY (players_id,games_id)
+    game_id BIGINT,
+    PRIMARY KEY (players_id,game_id)
 );
 
 ALTER TABLE pictures_games ADD FOREIGN KEY (pictures_id) REFERENCES pictures(id);
 ALTER TABLE pictures_games ADD FOREIGN KEY (games_id) REFERENCES game(id);
 ALTER TABLE game_players ADD FOREIGN KEY (players_id) REFERENCES player(id);
-ALTER TABLE game_players ADD FOREIGN KEY (games_id) REFERENCES game(id);
+ALTER TABLE game_players ADD FOREIGN KEY (game_id) REFERENCES game(id);

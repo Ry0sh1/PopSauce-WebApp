@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface PlayerToGameRepository extends CrudRepository<PlayerToGame, PlayerToGameId> {
 
-    List<PlayerToGame> findAllByGames(Game games);
+    List<PlayerToGame> findAllByGame(Game game);
 
 }

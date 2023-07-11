@@ -213,7 +213,7 @@ public class GameRestController {
     @GetMapping("/getAllPlayer/{code}")
     private String getAllPlayer(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
-        List<PlayerToGame> players = playerToGameRepository.findAllByGames(game);
+        List<PlayerToGame> players = playerToGameRepository.findAllByGame(game);
         StringBuilder json = new StringBuilder();
         json.append("[");
         for (PlayerToGame playerToGame:players) {

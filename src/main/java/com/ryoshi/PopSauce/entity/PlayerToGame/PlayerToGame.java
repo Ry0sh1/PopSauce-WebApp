@@ -11,25 +11,25 @@ public class PlayerToGame {
 
     @Id
     @OneToOne
-    private Game games;
+    private Game game;
     @Id
     @OneToOne
     private Player players;
 
-    public PlayerToGame(Game games, Player players) {
-        this.games = games;
+    public PlayerToGame(Game game, Player players) {
+        this.game = game;
         this.players = players;
     }
 
     public PlayerToGame() {
     }
 
-    public Game getGames() {
-        return games;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGames(Game games) {
-        this.games = games;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public Player getPlayers() {

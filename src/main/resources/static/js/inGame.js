@@ -51,14 +51,16 @@ function hideResult(){
 }
 
 function rightAnswer(){
-    let result = currentPicture.rightGuess.toLowerCase().split(',');
-    let input = inputElement.value.toLowerCase();
-    inputElement.value = '';
-    for (let i = 0; i < result.length;i++){
-        if (input === result[i]){
-            fetch("/add-points/" + username);
-            inputLabelElement.classList.add('right-answer');
-            goButton.classList.add('invisible');
+    if (!isShowingResult){
+        let result = currentPicture.rightGuess.toLowerCase().split(',');
+        let input = inputElement.value.toLowerCase();
+        inputElement.value = '';
+        for (let i = 0; i < result.length;i++){
+            if (input === result[i]){
+                fetch("/add-points/" + username);
+                inputLabelElement.classList.add('right-answer');
+                goButton.classList.add('invisible');
+            }
         }
     }
 }
@@ -175,6 +177,11 @@ function updatingData(){
     refreshTimer();
 }
 
+inputElement.addEventListener('keydown', (event)=>{
+    if (event.key==="Enter"){
+        rightAnswer();
+    }
+})
 
 //On Join
 fetch("/get-host/"+code)
@@ -195,7 +202,6 @@ fetch("/get-host/"+code)
         }
         setInterval(updatingData,10);
     })
-
 
 //TODO: Fix Bug -5
 //TODO: Fix Bug Join

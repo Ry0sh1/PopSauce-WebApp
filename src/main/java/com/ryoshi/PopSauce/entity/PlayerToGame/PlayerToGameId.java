@@ -8,11 +8,11 @@ import java.io.Serializable;
 public class PlayerToGameId implements Serializable {
 
     private Player players;
-    private Game games;
+    private Game game;
 
-    public PlayerToGameId(Player players, Game games) {
+    public PlayerToGameId(Player players, Game game) {
         this.players = players;
-        this.games = games;
+        this.game = game;
     }
 
     public PlayerToGameId() {
@@ -27,10 +27,10 @@ public class PlayerToGameId implements Serializable {
     }
 
     public Game getGames() {
-        return games;
+        return game;
     }
 
-    public void setGames(Game games) {
-        this.games = games;
+    public void setGames(Game game) {
+        this.game = game;
     }
 }
