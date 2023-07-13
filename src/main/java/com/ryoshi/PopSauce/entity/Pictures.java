@@ -15,18 +15,18 @@ public class Pictures {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String category;
-    private byte[] content;
+    private String content;
     @Value("right_guess")
     private String rightGuess;
 
-    public Pictures(Long id, String category, byte[] content, String rightGuess) {
+    public Pictures(Long id, String category, String content, String rightGuess) {
         this.id = id;
         this.category = category;
         this.content = content;
         this.rightGuess = rightGuess;
     }
 
-    public Pictures(String category, byte[] content, String rightGuess) {
+    public Pictures(String category, String content, String rightGuess) {
         this.category = category;
         this.content = content;
         this.rightGuess = rightGuess;
@@ -51,11 +51,11 @@ public class Pictures {
         this.category = category;
     }
 
-    public byte[] getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(byte[] content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

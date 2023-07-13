@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -135,7 +136,7 @@ public class GameRestController {
         playerRepository.save(user);
     }
 
-    @GetMapping("/join-game/{username}/{code}")
+    /*@GetMapping("/join-game/{username}/{code}")
     public void joinGame(@PathVariable String username, @PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
         Player newPlayer = new Player();
@@ -150,7 +151,7 @@ public class GameRestController {
         }
         playerToGameRepository.save(new PlayerToGame(game,newPlayer));
         game.getPlayers().add(newPlayer);
-    }
+    }*/
 
     @GetMapping("/get-points-of-user/{username}")
     public String getPoints(@PathVariable String username){
@@ -239,13 +240,6 @@ public class GameRestController {
         return String.valueOf(game.isStarted());
     }
 
-    @GetMapping("/started/{code}")
-    public void started(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        game.setStarted(true);
-        gameRepository.save(game);
-    }
-
     @GetMapping("/get-host/{code}")
     public String getHost(@PathVariable String code){
         return gameRepository.findByCode(code).orElseThrow().getHost().getUsername();
@@ -268,7 +262,8 @@ public class GameRestController {
         int counter = 0;
         for (File file:files) {
             byte[] imageData = ImageFactory.getImageAsBytes(file);
-            Pictures pic = new Pictures("Testing",imageData,right_guess.get(counter));
+            String base64Image = Base64.getEncoder().encodeToString(imageData);
+            Pictures pic = new Pictures("Testing",base64Image,right_guess.get(counter));
             pictureRepository.save(pic);
             counter++;
         }

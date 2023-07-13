@@ -15,6 +15,10 @@ public class PlayerToGameId implements Serializable {
         this.game = game;
     }
 
+    public PlayerToGameId(Player players) {
+        this.players = players;
+    }
+
     public PlayerToGameId() {
     }
 

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS game(
 
 CREATE TABLE IF NOT EXISTS pictures(
     id BIGSERIAL,
-    content bytea,
+    content TEXT,
     category TEXT,
     right_guess text,
     primary key (id)
