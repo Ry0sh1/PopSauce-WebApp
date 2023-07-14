@@ -62,11 +62,27 @@
   padding: 0 !important;
   border: none !important;
   font-size: 0 !important;
+  display: none !important;
 }
-.absolute{
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  width: 100px;
-  height: 1000px;
+.everything{
+  display: flex;
+  flex-direction: row;
+}
+.left{
+  width: 20%;
+}
+.middle{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.right{
+  width: 20%;
+}
+.player-field{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }

@@ -8,6 +8,7 @@ public enum MessageType {
     WRONG_ANSWER,
     TIME,
     START,
-    PICTURE
+    PICTURE,
+    POINTS
 
 }

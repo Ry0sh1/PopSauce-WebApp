@@ -19,6 +19,17 @@ const goButton = document.getElementById('go');
 const guessTime = parseInt(document.getElementById('set-guess-timer').innerText);
 const resultTime = parseInt(document.getElementById('set-result-timer').innerText);
 
+//Send Messages to server
+function sendMessage(){
+    const content = document.getElementById('chat-input').value;
+    document.getElementById('chat-input').value = '';
+    stompClient.send("/app/game.chat",
+        {},
+        JSON.stringify({gameCode:code,sender:username,content:content,messageType:'CHAT'})
+    );
+}
+
+
 //Only for Hosts to start the game!
 function setStart(){
     stompClient.send("/app/game.start",
@@ -26,7 +37,6 @@ function setStart(){
         JSON.stringify({gameCode:code,sender:username,messageType:'START'})
     );
 }
-
 
 //Game gets Started
 function start(){
@@ -43,7 +53,6 @@ function start(){
 
     refreshPicture();
 }
-
 function showResult(){
     h1Element.innerText = currentPicture.rightGuess.split(',')[0];
     goButton.classList.add('invisible');
@@ -55,19 +64,23 @@ function hideResult(){
 }
 function rightAnswer(){
     if (!isShowingResult){
+        let trueInput = inputElement.value;
         let result = currentPicture.rightGuess.toLowerCase().split(',');
-        let input = inputElement.value.toLowerCase();
+        let input = trueInput.toLowerCase();
         inputElement.value = '';
         for (let i = 0; i < result.length;i++){
             if (input === result[i]){
-                //TODO replace fetch on "/add-points/"
+                stompClient.send("/app/game.addPoints",
+                    {},
+                    JSON.stringify({gameCode:code,sender:username,content:10,messageType:'POINTS'})
+                );
                 inputLabelElement.classList.add('right-answer');
                 goButton.classList.add('invisible');
             }
             else {
                 stompClient.send("/app/game.wrongAnswer",
                     {},
-                    JSON.stringify({gameCode:code,sender:username,content:input,messageType:'WRONG_ANSWER'})
+                    JSON.stringify({gameCode:code,sender:username,content:trueInput,messageType:'WRONG_ANSWER'})
                 );
             }
         }
@@ -123,7 +136,7 @@ function onError(){
 }
 function onConnected(){
     stompClient.subscribe("/start-game/game", onMessageReceived);
-    stompClient.send("/app/game.chat",
+    stompClient.send("/app/game.join",
         {},
         JSON.stringify({gameCode:code,sender:username,messageType:'JOIN'})
     );
@@ -142,8 +155,9 @@ function onMessageReceived(payload){
     console.log("Message Received");
     if (message.gameCode === code){
         if (message.messageType === 'JOIN'){
-            console.log(message.sender + ' Joined');
+            newChatMessage(message);
             players.push({username:message.sender,points:0});
+            newPlayer(message);
             refreshPoints();
         }
         if (message.messageType === 'TIME'){
@@ -154,30 +168,58 @@ function onMessageReceived(payload){
             start();
         }
         if (message.messageType === 'WRONG_ANSWER'){
-            //TODO
+            displayWrongAnswer(message);
         }
         if (message.messageType === 'PICTURE'){
             currentPicture = message.content;
             refreshPicture();
+        }
+        if (message.messageType === 'POINTS'){
+            refreshPoints(message);
+        }
+        if (message.messageType === 'CHAT'){
+            newChatMessage(message);
         }
     }
 }
 
 
 //Updating Points and Player on Change
-function refreshPoints(){
+function refreshPoints(message){
+    const pointsElement = document.getElementById(`player-field-points-${message.sender}`);
+    pointsElement.innerText = (parseInt(pointsElement.innerText) + message.content);
+}
+function displayWrongAnswer(message){
+    const wrongAnswerElement = document.getElementById(`player-field-wrongAnswer-${message.sender}`);
+    wrongAnswerElement.innerText = message.content;
+}
+function newPlayer(message){
     const container = document.getElementById('all-player');
-    for (let i = 0;i < players.length;i++){
-        if (document.getElementById(players[i].username) == null){
-            let newElement = document.createElement('p');
-            newElement.classList.add('player');
-            newElement.innerText = `${players[i].username} Points: ${players[i].points}`;
-            newElement.id = players[i].username;
-            container.appendChild(newElement);
-        }else {
-            document.getElementById(players[i].username).innerText = `${players[i].username} Points: ${players[i].points}`;
-        }
+    const newContainer = document.createElement('div');
+    newContainer.classList.add('player-field');
+    const usernameElement = document.createElement('p');
+    const pointsElement = document.createElement('p');
+    const wrongAnswerElement = document.createElement('p');
+    usernameElement.id = `player-field-username-${message.sender}`;
+    pointsElement.id = `player-field-points-${message.sender}`;
+    wrongAnswerElement.id = `player-field-wrongAnswer-${message.sender}`;
+    usernameElement.innerText = `${message.sender}: `;
+    pointsElement.innerText = "0";
+    wrongAnswerElement.innerText = 'Test';
+    newContainer.appendChild(usernameElement);
+    newContainer.appendChild(pointsElement);
+    newContainer.appendChild(wrongAnswerElement);
+    container.appendChild(newContainer);
+}
+function newChatMessage(message){
+    const chat = document.getElementById('chat-list');
+    const newMessage = document.createElement('li');
+    if (message.messageType === 'JOIN'){
+        newMessage.innerText = `${message.sender} joined the Game!`;
+    }else {
+        newMessage.innerText = `${message.sender}: ${message.content}`;
     }
+    chat.appendChild(newMessage);
 }
 
 

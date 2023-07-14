@@ -70,8 +70,8 @@ public class WebSocketMessageSender {
                 settingRepository.delete(game.getSetting());
                 game.setHost(null);
                 game.setSetting(null);
-                gameRepository.delete(game);
                 pictureToGameRepository.deleteAll(pictureToGameRepository.findAllByGames(game));
+                gameRepository.delete(game);
             }
             if (game.getHost() == player){
                 game.setHost(playerToGameRepository.findAllByGame(game).get(0).getPlayers());

@@ -9,19 +9,27 @@
 <p class="invisible" id="set-result-timer" th:text="${game.get().getSetting().resultTimer}"></p>
 <p class="invisible" id="set-guess-timer" th:text="${game.get().getSetting().guessTimer}"></p>
 <p class="invisible" id="set-host-username" th:text="${game.get().host.getUsername()}"></p>
-<div class="content">
-  <p id="timer" class="invisible"></p>
-  <h1 class="low-margin" id="anime"></h1>
-  <p id="picture-here"></p>
-  <button id="start-button" onclick="setStart()">
-    Start
-  </button>
-  <label class="invisible" id="input-label" for="input">Your Guess</label>
-  <input class="invisible" id="input" type="text">
-  <button onclick="rightAnswer()" class="invisible" id="go">Go</button>
-  <p id="waiting" class="invisible">Waiting for Host to start the game</p>
+<div class="everything">
+  <div class="left" id="all-player"></div>
+  <div class="middle">
+    <p id="timer" class="invisible"></p>
+    <h1 class="low-margin" id="anime"></h1>
+    <p id="picture-here"></p>
+    <button id="start-button" onclick="setStart()">
+      Start
+    </button>
+    <label class="invisible" id="input-label" for="input">Your Guess</label>
+    <input class="invisible" id="input" type="text">
+    <button onclick="rightAnswer()" class="invisible" id="go">Go</button>
+    <p id="waiting" class="invisible">Waiting for Host to start the game</p>
+  </div>
+  <div class="right">
+    <ul id="chat-list" class="chat-list"></ul>
+    <label for="chat-input">Chat with your Friends!</label>
+    <input type="text" id="chat-input">
+    <button onclick="sendMessage()">Send</button>
+  </div>
 </div>
-<div class="absolute" id="all-player"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/js/inGame.js"></script>

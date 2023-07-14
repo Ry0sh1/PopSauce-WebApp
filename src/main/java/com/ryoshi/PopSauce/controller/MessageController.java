@@ -46,7 +46,13 @@ public class MessageController {
 
     @MessageMapping("/game.chat")
     @SendTo("/start-game/game")
-    public Message chat(@Payload Message message, SimpMessageHeaderAccessor headerAccessor){
+    public Message chatMessage(@Payload Message message){
+        return message;
+    }
+
+    @MessageMapping("/game.join")
+    @SendTo("/start-game/game")
+    public Message joinChat(@Payload Message message, SimpMessageHeaderAccessor headerAccessor){
         if (message.getMessageType() == MessageType.JOIN){
             headerAccessor.getSessionAttributes().put("username",message.getSender());
             headerAccessor.getSessionAttributes().put("gameCode",message.getGameCode());
@@ -77,6 +83,15 @@ public class MessageController {
         }else {
             return null;
         }
+    }
+
+    @MessageMapping("/game.addPoints")
+    @SendTo("/start-game/game")
+    public Message addPoints(@Payload Message message){
+        Player player = playerRepository.findByUsername(message.getSender());
+        player.setPoints(player.getPoints()+((Integer) message.getContent()));
+        playerRepository.save(player);
+        return message;
     }
 
 }
