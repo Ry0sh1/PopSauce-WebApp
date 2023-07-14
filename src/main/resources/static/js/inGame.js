@@ -6,7 +6,7 @@ const timerElement = document.getElementById('timer');
 let players = [];
 let username = localStorage.getItem('username');
 const code = window.location.href.slice(window.location.href.length-4,window.location.href.length);
-let host = false;v
+let host = false;
 let isShowingResult;
 let timer;
 
