@@ -6,9 +6,9 @@ const timerElement = document.getElementById('timer');
 let players = [];
 let username = localStorage.getItem('username');
 const code = window.location.href.slice(window.location.href.length-4,window.location.href.length);
-let host = false;
-let timer;
+let host = false;v
 let isShowingResult;
+let timer;
 
 //Playground
 const inputElement = document.getElementById('input');
@@ -61,6 +61,10 @@ function hideResult(){
     h1Element.innerText = "";
     goButton.classList.remove('invisible');
     inputLabelElement.classList.remove('right-answer');
+    players.forEach(player=>{
+        let wrongAnswerElement = document.getElementById(`player-field-wrongAnswer-${player.username}`);
+        wrongAnswerElement.innerText = '';
+    });
 }
 function rightAnswer(){
     if (!isShowingResult){
@@ -76,14 +80,13 @@ function rightAnswer(){
                 );
                 inputLabelElement.classList.add('right-answer');
                 goButton.classList.add('invisible');
-            }
-            else {
-                stompClient.send("/app/game.wrongAnswer",
-                    {},
-                    JSON.stringify({gameCode:code,sender:username,content:trueInput,messageType:'WRONG_ANSWER'})
-                );
+                return;
             }
         }
+        stompClient.send("/app/game.wrongAnswer",
+            {},
+            JSON.stringify({gameCode:code,sender:username,content:trueInput,messageType:'WRONG_ANSWER'})
+        );
     }
 }
 function refreshPicture() {
@@ -158,7 +161,7 @@ function onMessageReceived(payload){
             newChatMessage(message);
             players.push({username:message.sender,points:0});
             newPlayer(message);
-            refreshPoints();
+            refreshPoints(message);
         }
         if (message.messageType === 'TIME'){
             timer = parseInt(message.content);
@@ -180,6 +183,9 @@ function onMessageReceived(payload){
         if (message.messageType === 'CHAT'){
             newChatMessage(message);
         }
+        if (message.messageType === 'LEAVE'){
+            removePlayer(message);
+        }
     }
 }
 
@@ -194,32 +200,52 @@ function displayWrongAnswer(message){
     wrongAnswerElement.innerText = message.content;
 }
 function newPlayer(message){
-    const container = document.getElementById('all-player');
-    const newContainer = document.createElement('div');
-    newContainer.classList.add('player-field');
-    const usernameElement = document.createElement('p');
-    const pointsElement = document.createElement('p');
-    const wrongAnswerElement = document.createElement('p');
-    usernameElement.id = `player-field-username-${message.sender}`;
-    pointsElement.id = `player-field-points-${message.sender}`;
-    wrongAnswerElement.id = `player-field-wrongAnswer-${message.sender}`;
-    usernameElement.innerText = `${message.sender}: `;
-    pointsElement.innerText = "0";
-    wrongAnswerElement.innerText = 'Test';
-    newContainer.appendChild(usernameElement);
-    newContainer.appendChild(pointsElement);
-    newContainer.appendChild(wrongAnswerElement);
-    container.appendChild(newContainer);
+    if (document.getElementById(`player-field-username-${message.sender}`)==null){
+        const container = document.getElementById('all-player');
+        const newContainer = document.createElement('div');
+        newContainer.classList.add('player-field');
+        const usernameElement = document.createElement('p');
+        const pointsElement = document.createElement('p');
+        const wrongAnswerElement = document.createElement('p');
+        usernameElement.id = `player-field-username-${message.sender}`;
+        pointsElement.id = `player-field-points-${message.sender}`;
+        wrongAnswerElement.id = `player-field-wrongAnswer-${message.sender}`;
+        usernameElement.innerText = `${message.sender}: `;
+        if (message.points === undefined){
+            pointsElement.innerText = "0";
+        }else {
+            pointsElement.innerText = message.points;
+        }
+        newContainer.appendChild(usernameElement);
+        newContainer.appendChild(pointsElement);
+        newContainer.appendChild(wrongAnswerElement);
+        container.appendChild(newContainer);
+    }
 }
 function newChatMessage(message){
     const chat = document.getElementById('chat-list');
     const newMessage = document.createElement('li');
     if (message.messageType === 'JOIN'){
         newMessage.innerText = `${message.sender} joined the Game!`;
-    }else {
+    }else if (message.messageType === 'LEAVE'){
+        newMessage.innerText = `${message.sender} left the Game!`;
+    }
+    else {
         newMessage.innerText = `${message.sender}: ${message.content}`;
     }
     chat.appendChild(newMessage);
+}
+function removePlayer(message){
+    document.getElementById(`player-field-username-${message.sender}`).remove();
+    document.getElementById(`player-field-points-${message.sender}`).remove();
+    document.getElementById(`player-field-wrongAnswer-${message.sender}`).remove();
+    newChatMessage(message);
+    for (let i = 0;i < players.length;i++){
+        if (players[i].username === message.sender){
+            players.slice(i,1);
+            break;
+        }
+    }
 }
 
 
@@ -236,7 +262,10 @@ function fetchPlayers(){
         .then(response=>response.json())
         .then(data => {
             players = data;
-            refreshPoints();
+            players.forEach(player=>{
+                let message = {sender:player.username,points: player.points};
+                newPlayer(message);
+            })
         });
 }
 function fetchStatus(){

@@ -59,6 +59,7 @@ public class WebSocketMessageSender {
         if (username != null) {
             System.out.println(username + " left the game");
             var chatMessage = Message.builder()
+                    .gameCode(gameCode)
                     .messageType(MessageType.LEAVE)
                     .sender(username)
                     .build();
