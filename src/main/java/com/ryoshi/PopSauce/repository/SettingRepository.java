@@ -1,9 +1,9 @@
 package com.ryoshi.PopSauce.repository;
 
-import com.ryoshi.PopSauce.entity.Game;
+import com.ryoshi.PopSauce.entity.Setting;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GameRepository extends CrudRepository<Game, Long> {
+public interface SettingRepository extends CrudRepository<Setting, Long> {
 }

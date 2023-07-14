@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+<img class="background" src="/background/background-5.jpg" alt="background">
+<div class="content">
+  <h1 class="home-header">Pop Sauce</h1>
+  <p class="home-game-description">
+    Die Größe der Affen schwankt zwischen dem Zwergseidenäffchen,
+    mit einer Kopf-Rumpf-Länge von rund 12 bis 15 Zentimetern und
+    einem Gewicht von rund 100 Gramm, und den Gorillas, die stehend
+    bis zu 1,75 Meter hoch werden und ein Gewicht von 200 Kilogramm
+    erreichen können, sowie den Menschen mit einer Körpergröße von
+    durchschnittlich 1,60 bis 1,80 Metern, in Einzelfällen auch mehr
+    als 2,00 Metern. Einige Arten haben einen ausgeprägten
+    Geschlechtsdimorphismus, wobei die Männchen mancher Arten doppelt
+    so schwer wie die Weibchen sein können und sich auch in der Fellfarbe
+    unterscheiden können. Ihr Körper ist meist mit Fell bedeckt, dessen
+    Färbung von schwarz über verschiedene Braun- und Grautöne bis zu weiß
+    variieren kann. Die Handflächen und Fußsohlen sind meistens unbehaart,
+    manchmal auch das Gesicht. Die Augen sind groß und nach vorn gerichtet,
+    womit ein guter Gesichtssinn einhergeht. Als Trockennasenprimaten ist
+    ihr Geruchssinn hingegen unterentwickelt.
+  </p>
+  <div class="home-username-field">
+    <label for="input-username">Select Username:</label>
+    <input class="home-input" id="input-username" type="text">
+  </div>
+  <div class="home-interaction">
+    <div class="home-field">
+      <h2>Create your own Game!</h2>
+      <button onclick="createGame()" class="home-button">
+        Create Game
+      </button>
+    </div>
+    <div class="home-field">
+      <h2>Join your Friends!</h2>
+      <label for="input-code">Enter Room Code:</label>
+      <input class="home-input" type="text" id="input-code">
+      <button onclick="joinGame()" class="home-button">
+        Join Game
+      </button>
+    </div>
+  </div>
+</div>
+<script src="/js/home.js"></script>
+</body>
+</html>

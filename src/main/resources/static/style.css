@@ -1,0 +1,88 @@
+.image{
+  width: 600px;
+  height: 600px;
+  object-fit: contain;
+}
+#anime, #timer{
+  text-align: center;
+  font-size: 34px;
+  font-family: Arial,serif;
+}
+.low-margin{
+  margin: 4px;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#input-label{
+  font-size: 24px;
+  font-family: Arial, serif;
+}
+#input{
+  background-color: white;
+  border-style: solid;
+  padding: 6px 24px;
+  width: 400px;
+  font-size: 24px;
+  font-family: Arial, serif;
+}
+.right-answer{
+  color: #00d900;
+}
+#go, #start-button{
+  width: 100px;
+  padding: 6px;
+  border-radius: 60px;
+  background-color: #00d900;
+  border: none;
+  transition: all 0.15s;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 16px;
+  cursor: pointer;
+}
+#go:hover, #start-button:hover{
+  color: #00d900;
+  background-color: white;
+  box-shadow: 0 0 10px black;
+}
+#go:active, #start-button:active{
+  color: #00d900;
+  background-color: white;
+  opacity: 0.5;
+  box-shadow: 0 0 10px black;
+}
+.invisible{
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  font-size: 0 !important;
+  display: none !important;
+}
+.everything{
+  display: flex;
+  flex-direction: row;
+}
+.left{
+  width: 20%;
+}
+.middle{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.right{
+  width: 20%;
+}
+.player-field{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create-Game</title>
+  <link rel="stylesheet" href="/css/create-game.css">
+</head>
+<body>
+<img class="background" src="/background/background-5.jpg" alt="background">
+<div class="content">
+  <div class="create-game-field">
+    <label class="create-game-label" for="guess-timer">Guess Timer:</label>
+    <input class="create-game-input" type="number" min="7" max="15" id="guess-timer">
+  </div>
+  <div class="create-game-field">
+    <label class="create-game-label" for="result-timer">Result Timer:</label>
+    <input class="create-game-input" type="number" min="2" max="5" id="result-timer">
+  </div>
+  <div class="create-game-field">
+    <label class="create-game-label" for="category">Category:</label>
+    <input class="create-game-input" type="text" id="category" placeholder="Category">
+  </div>
+  <div class="create-game-field">
+    <button class="create-game-button" onclick="setSettings();">Start Game</button>
+  </div>
+</div>
+<script src="/js/settings.js"></script>
+</body>
+</html>
