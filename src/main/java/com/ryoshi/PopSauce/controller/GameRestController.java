@@ -12,9 +12,15 @@ import com.ryoshi.PopSauce.repository.*;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -136,28 +142,57 @@ public class GameRestController {
         playerRepository.save(user);
     }
 
-    /*@GetMapping("/join-game/{username}/{code}")
-    public void joinGame(@PathVariable String username, @PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        Player newPlayer = new Player();
-        newPlayer.setUsername(username);
-        newPlayer.setPoints(0);
-        if (playerRepository.findByUsername(username) != null){
-            long id = playerRepository.findByUsername(username).getId();
-            newPlayer.setId(id);
-            playerRepository.save(newPlayer);
-        }else {
-            playerRepository.save(newPlayer);
-        }
-        playerToGameRepository.save(new PlayerToGame(game,newPlayer));
-        game.getPlayers().add(newPlayer);
-    }*/
-
     @GetMapping("/get-points-of-user/{username}")
     public String getPoints(@PathVariable String username){
         return String.valueOf(playerRepository.findByUsername(username).getPoints());
     }
 
+    @GetMapping("/getAllPlayer/{code}")
+    private String getAllPlayer(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        List<PlayerToGame> players = playerToGameRepository.findAllByGame(game);
+        StringBuilder json = new StringBuilder();
+        json.append("[");
+        for (PlayerToGame playerToGame:players) {
+            json.append("{\"username\":\"").append(playerToGame.getPlayers().getUsername()).append("\",\"points\":").append(playerToGame.getPlayers().getPoints()).append("},");
+        }
+        json.deleteCharAt(json.length()-1);
+        json.append("]");
+        //System.out.println(json); For testing purposes
+        return json.toString();
+    }
+
+    @GetMapping("/clear-database")
+    public void clearDatabase(){
+        gameRepository.deleteAll();
+        pictureToGameRepository.deleteAll();
+        playerRepository.deleteAll();
+        settingRepository.deleteAll();
+    }
+
+    @GetMapping("/is-started/{code}")
+    public String isStarted(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        return String.valueOf(game.isStarted());
+    }
+
+    @GetMapping("/get-host/{code}")
+    public String getHost(@PathVariable String code){
+        return gameRepository.findByCode(code).orElseThrow().getHost().getUsername();
+    }
+
+    @GetMapping("/set-current-timer/{code}/{time}")
+    public void setCurrentTimer(@PathVariable String code, @PathVariable int time){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        game.setCurrentTimer(time);
+        gameRepository.save(game);
+    }
+
+    @GetMapping("/get-current-timer/{code}")
+    public String getCurrentGameTimer(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElseThrow();
+        return String.valueOf(game.getCurrentTimer());
+    }
     @GetMapping("/insert-test-data-into-database")
     public void test(){
         List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures"));
@@ -211,51 +246,37 @@ public class GameRestController {
         }
     }
 
-    @GetMapping("/getAllPlayer/{code}")
-    private String getAllPlayer(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        List<PlayerToGame> players = playerToGameRepository.findAllByGame(game);
-        StringBuilder json = new StringBuilder();
-        json.append("[");
-        for (PlayerToGame playerToGame:players) {
-            json.append("{\"username\":\"").append(playerToGame.getPlayers().getUsername()).append("\",\"points\":").append(playerToGame.getPlayers().getPoints()).append("},");
+    @GetMapping("/insert-flag-data-into-database")
+    public void flagPictures(){
+        String[] flagNames = {"af","eg","ax","al","dz","as","vi","ad","ao","ai","aq","ag","gq","ar","am",
+                "aw","az","et","au","bs","bh","bd","bb","be","bz","bj","bm","bt","bo","ba","bw","bv","br",
+                "vg","io","bn","bg","bf","bi","cl","cn","ck","cr","cw","dk","de","dm","do","dj","ec","sv",
+                "ci","gb-eng","er","ee","fk","fo","fj","fi","fr","gf","pf","tf","ga","gm","ge","gh","gi",
+                "gd","gr","gl","gp","gu","gt","gg","gn","gw","gy","ht","hm","hn","hk","in","id","im","iq",
+                "ir","ie","is","il","it","jm","jp","ye","je","jo","ky","kh","cm","ca","cv","bq","kz","qa",
+                "ke","kg","ki","um","cc","co","km","cg","cd","xk","hr","cu","kw","la","ls","lv","lb","lr",
+                "ly","li","lt","lu","mo","mg","mw","my","mv","ml","mt","ma","mh","mq","mr","mu","yt","mx",
+                "fm","md","mc","mn","me","ms","mz","mm", "na","nr","nc", "nz","ni","nl","ne","ng","nu",
+                "gb-nir","kp","mp","mk","nf","no","om", "at","tl","pk","ps","pw","pa","pg","py","pe","ph",
+                "pn","pl","pt","pr","re","rw","ro","ru","bl","mf","sb","zm","ws","sm","st","sa","gb-sct",
+                "se","ch","sn","rs","sc","sl","zw","sg","sx","sk","si","so","es","sj","lk","sh","kn","lc",
+                "pm","vc","za","sd","gs","kr","ss","sr","sz","sy","tj","tw","tz","th","tg","tk","to","tt",
+                "td","cz","tn","tr","tm","tc","tv","ug","ua","hu","uy","uz","vu","va","ve","ae","us","gb",
+                "vn","gb-wls","wf","cz","by","eh","cf","cy"};
+        System.out.println(flagNames.length);
+        try {
+            for (int i = 0;i<flagNames.length;i++){
+                ImageFactory.createImageFile(ImageFactory.getImage("https://flagcdn.com/w2560/" + flagNames[i] +".png"),new URI("src/main/resources/pictures/Flags"),flagNames[i]);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
-        json.deleteCharAt(json.length()-1);
-        json.append("]");
-        //System.out.println(json); For testing purposes
-        return json.toString();
     }
 
-    @GetMapping("/clear-database")
-    public void clearDatabase(){
-        gameRepository.deleteAll();
-        pictureToGameRepository.deleteAll();
-        playerRepository.deleteAll();
-        settingRepository.deleteAll();
-    }
-
-    @GetMapping("/is-started/{code}")
-    public String isStarted(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        return String.valueOf(game.isStarted());
-    }
-
-    @GetMapping("/get-host/{code}")
-    public String getHost(@PathVariable String code){
-        return gameRepository.findByCode(code).orElseThrow().getHost().getUsername();
-    }
-
-    @GetMapping("/set-current-timer/{code}/{time}")
-    public void setCurrentTimer(@PathVariable String code, @PathVariable int time){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        game.setCurrentTimer(time);
-        gameRepository.save(game);
-    }
-
-    @GetMapping("/get-current-timer/{code}")
-    public String getCurrentGameTimer(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        return String.valueOf(game.getCurrentTimer());
+    private String getFileName(File file){
+        return file.getName().substring(0,file.getName().length()-4);
     }
 
     private void insertIntoDB(List<File> files, List<String> right_guess) throws IOException {

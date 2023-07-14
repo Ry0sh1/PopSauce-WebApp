@@ -38,6 +38,7 @@ function setStart(){
     );
 }
 
+
 //Game gets Started
 function start(){
 
