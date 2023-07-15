@@ -4,7 +4,7 @@
   margin: 0 auto 0 auto;
   padding: 6px 32px;
 }
-h1, p, button, div, input, label, h2{
+h1, p, button, div, input, label, h2, section, option{
   font-family: Arial,serif;
 }
 body{
@@ -56,4 +56,10 @@ body{
 .create-game-button:active{
   opacity: 0.5;
   box-shadow: 0 0 15px black;
+}
+#category{
+  font-size: 26px;
+  padding: 4px 8px;
+  border: #7bb622 solid 1px;
+  border-radius: 20px;
 }

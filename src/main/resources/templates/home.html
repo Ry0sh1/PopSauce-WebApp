@@ -28,7 +28,10 @@
   </p>
   <div class="home-username-field">
     <label for="input-username">Select Username:</label>
-    <input class="home-input" id="input-username" type="text">
+    <div>
+      <input class="home-input" id="input-username" type="text">
+      <label class="invisible" id="invalid-username">Username already exists</label>
+    </div>
   </div>
   <div class="home-interaction">
     <div class="home-field">
@@ -41,6 +44,7 @@
       <h2>Join your Friends!</h2>
       <label for="input-code">Enter Room Code:</label>
       <input class="home-input" type="text" id="input-code">
+      <label class="invisible" id="invalid-code">Invalid Code</label>
       <button onclick="joinGame()" class="home-button">
         Join Game
       </button>

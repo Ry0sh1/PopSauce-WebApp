@@ -18,7 +18,9 @@
   </div>
   <div class="create-game-field">
     <label class="create-game-label" for="category">Category:</label>
-    <input class="create-game-input" type="text" id="category" placeholder="Category">
+    <select id="category" th:field="*{settings}" required>
+      <option th:each="cateory : ${categories}" th:text="${cateory}" th:value="${cateory}"></option>
+    </select>
   </div>
   <div class="create-game-field">
     <button class="create-game-button" onclick="setSettings();">Start Game</button>

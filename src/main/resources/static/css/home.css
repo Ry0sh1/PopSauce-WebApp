@@ -66,3 +66,15 @@ body{
   position: absolute;
   z-index: -2;
 }
+.invisible{
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  font-size: 0 !important;
+  display: none !important;
+}
+#invalid-code,#invalid-username{
+  color: red;
+}
