@@ -203,11 +203,11 @@ public class GameRestController {
         rightGuesses.add("Vinland Saga");
         rightGuesses.add("Vinland Saga");
         rightGuesses.add("Violet Evergarden");
-        try {
+       /* try {
             insertIntoDB(files,rightGuesses);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     @GetMapping("/insert-flag-data-into-database")
@@ -226,29 +226,15 @@ public class GameRestController {
                 "se","ch","sn","rs","sc","sl","zw","sg","sx","sk","si","so","es","sj","lk","sh","kn","lc",
                 "pm","vc","za","sd","gs","kr","ss","sr","sz","sy","tj","tw","tz","th","tg","tk","to","tt",
                 "td","cz","tn","tr","tm","tc","tv","ug","ua","hu","uy","uz","vu","va","ve","ae","us","gb",
-                "vn","gb-wls","wf","cz","by","eh","cf","cy"};
-        try {
-            for (String flagName : flagNames) {
-                ImageFactory.createImageFile(ImageFactory.getImage("https://flagcdn.com/w2560/" + flagName + ".png"), new URI("src/main/resources/pictures/Flags"), flagName);
-            }
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GetMapping("/debug")
-    public void debugging(){
-
-
 
     }
 
-    private void insertIntoDB(List<File> files, List<String> right_guess) throws IOException {
+    private void insertIntoDB(List<File> files, List<String> right_guess,String Category) throws IOException {
         int counter = 0;
         for (File file:files) {
             byte[] imageData = ImageFactory.getImageAsBytes(file);
             String base64Image = Base64.getEncoder().encodeToString(imageData);
-            Pictures pic = new Pictures("Testing",base64Image,right_guess.get(counter));
+            Pictures pic = new Pictures(Category,base64Image,right_guess.get(counter));
             pictureRepository.save(pic);
             counter++;
         }
