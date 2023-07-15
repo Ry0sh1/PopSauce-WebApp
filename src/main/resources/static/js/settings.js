@@ -5,7 +5,16 @@ let category;
 function setSettings(){
     guessTime = document.getElementById('guess-timer').value;
     resultTime = document.getElementById('result-timer').value;
-    category = document.getElementById('category').value;
+    const categoryElement = document.getElementById('category');
+    category = categoryElement.options[categoryElement.selectedIndex].text;
+
+    //Break Protection
+    if (guessTime < 7 || guessTime > 15){
+        guessTime = 7;
+    }
+    if (resultTime < 2 && guessTime > 5){
+        resultTime = 2;
+    }
 
     const settings = {
         "guessTimer":guessTime,
@@ -33,3 +42,6 @@ function setSettings(){
     .then(code => window.location.href = "/start-game/" + code);
 
 }
+
+document.getElementById('guess-timer').value = 7;
+document.getElementById('result-timer').value = 2;

@@ -12,17 +12,11 @@ import com.ryoshi.PopSauce.repository.*;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class GameRestController {
@@ -48,22 +42,16 @@ public class GameRestController {
         this.playerToGameRepository = playerToGameRepository;
     }
 
-    @GetMapping("/get-next-picture/{code}")
-    public String getNextPicture(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        PictureToGame pictureToGame = pictureToGameRepository.findByGamesAndPictures(game,game.getCurrentPicture())
-                .orElseThrow();
-        int pictureToGameListSize = pictureToGameRepository.findAllByGames(game).size();
-        PictureToGame nextPicture;
-        if (pictureToGame.getPlace()+1<pictureToGameListSize){
-            nextPicture = pictureToGameRepository.findByGamesAndPlace(game,pictureToGame.getPlace()+1)
-                    .orElseThrow();
-        }else {
-            nextPicture = pictureToGameRepository.findByGamesAndPlace(game,0)
-                    .orElseThrow();
-        }
-        Gson gson = new Gson();
-        return gson.toJson(nextPicture.getPictures());
+    @GetMapping("/is-code-valid/{code}")
+    public boolean isCodeValid(@PathVariable String code){
+        Game game = gameRepository.findByCode(code).orElse(null);
+        return game != null;
+    }
+
+    @GetMapping("/is-username-valid/{username}")
+    public boolean isUsernameValid(@PathVariable String username){
+        Player player = playerRepository.findByUsername(username);
+        return player == null;
     }
 
     @GetMapping("/get-current-picture/{code}")
@@ -75,12 +63,6 @@ public class GameRestController {
         Pictures currentPicture = game.getCurrentPicture();
         Gson gson = new Gson();
         return gson.toJson(currentPicture);
-    }
-
-    @GetMapping("/current-timer/{code}")
-    public String getCurrentTimer(@PathVariable String code){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        return String.valueOf(game.getCurrentTimer());
     }
 
     @PostMapping("/create")
@@ -135,18 +117,6 @@ public class GameRestController {
         return code.toString();
     }
 
-    @GetMapping("/add-points/{username}")
-    public void addPoints(@PathVariable String username){
-        Player user = playerRepository.findByUsername(username);
-        user.setPoints(user.getPoints() + 10);
-        playerRepository.save(user);
-    }
-
-    @GetMapping("/get-points-of-user/{username}")
-    public String getPoints(@PathVariable String username){
-        return String.valueOf(playerRepository.findByUsername(username).getPoints());
-    }
-
     @GetMapping("/getAllPlayer/{code}")
     private String getAllPlayer(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
@@ -181,18 +151,12 @@ public class GameRestController {
         return gameRepository.findByCode(code).orElseThrow().getHost().getUsername();
     }
 
-    @GetMapping("/set-current-timer/{code}/{time}")
-    public void setCurrentTimer(@PathVariable String code, @PathVariable int time){
-        Game game = gameRepository.findByCode(code).orElseThrow();
-        game.setCurrentTimer(time);
-        gameRepository.save(game);
-    }
-
     @GetMapping("/get-current-timer/{code}")
     public String getCurrentGameTimer(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
         return String.valueOf(game.getCurrentTimer());
     }
+
     @GetMapping("/insert-test-data-into-database")
     public void test(){
         List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures"));
@@ -263,20 +227,20 @@ public class GameRestController {
                 "pm","vc","za","sd","gs","kr","ss","sr","sz","sy","tj","tw","tz","th","tg","tk","to","tt",
                 "td","cz","tn","tr","tm","tc","tv","ug","ua","hu","uy","uz","vu","va","ve","ae","us","gb",
                 "vn","gb-wls","wf","cz","by","eh","cf","cy"};
-        System.out.println(flagNames.length);
         try {
-            for (int i = 0;i<flagNames.length;i++){
-                ImageFactory.createImageFile(ImageFactory.getImage("https://flagcdn.com/w2560/" + flagNames[i] +".png"),new URI("src/main/resources/pictures/Flags"),flagNames[i]);
+            for (String flagName : flagNames) {
+                ImageFactory.createImageFile(ImageFactory.getImage("https://flagcdn.com/w2560/" + flagName + ".png"), new URI("src/main/resources/pictures/Flags"), flagName);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String getFileName(File file){
-        return file.getName().substring(0,file.getName().length()-4);
+    @GetMapping("/debug")
+    public void debugging(){
+
+
+
     }
 
     private void insertIntoDB(List<File> files, List<String> right_guess) throws IOException {
