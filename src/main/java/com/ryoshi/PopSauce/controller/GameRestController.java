@@ -157,9 +157,9 @@ public class GameRestController {
         return String.valueOf(game.getCurrentTimer());
     }
 
-    @GetMapping("/insert-test-data-into-database")
+    @GetMapping("/insert-anime-data-into-database")
     public void test(){
-        List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures"));
+        List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures/animes"));
         List<String> rightGuesses = new ArrayList<>();
         rightGuesses.add("Attack on Titan,AoT");
         rightGuesses.add("Attack on Titan,AoT");
@@ -203,11 +203,37 @@ public class GameRestController {
         rightGuesses.add("Vinland Saga");
         rightGuesses.add("Vinland Saga");
         rightGuesses.add("Violet Evergarden");
-       /* try {
-            insertIntoDB(files,rightGuesses);
+        try {
+            insertIntoDB(files,rightGuesses,"Anime");
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }*/
+        }
+    }
+
+    @GetMapping("/download-flag-data")
+    public void downloadFlagData(){
+        String[] flagNames  = {"af","eg","ax","al","dz","as","vi","ad","ao","ai","aq","ag","gq","ar","am",
+                "aw","az","et","au","bs","bh","bd","bb","be","bz","bj","bm","bt","bo","ba","bw","bv","br",
+                "vg","io","bn","bg","bf","bi","cl","cn","ck","cr","cw","dk","de","dm","do","dj","ec","sv",
+                "ci","gb-eng","er","ee","fk","fo","fj","fi","fr","gf","pf","tf","ga","gm","ge","gh","gi",
+                "gd","gr","gl","gp","gu","gt","gg","gn","gw","gy","ht","hm","hn","hk","in","id","im","iq",
+                "ir","ie","is","il","it","jm","jp","ye","je","jo","ky","kh","cm","ca","cv","bq","kz","qa",
+                "ke","kg","ki","um","cc","co","km","cg","cd","xk","hr","cu","kw","la","ls","lv","lb","lr",
+                "ly","li","lt","lu","mo","mg","mw","my","mv","ml","mt","ma","mh","mq","mr","mu","yt","mx",
+                "fm","md","mc","mn","me","ms","mz","mm", "na","nr","nc", "nz","ni","nl","ne","ng","nu",
+                "gb-nir","kp","mp","mk","nf","no","om", "at","tl","pk","ps","pw","pa","pg","py","pe","ph",
+                "pn","pl","pt","pr","re","rw","ro","ru","bl","mf","sb","zm","ws","sm","st","sa","gb-sct",
+                "se","ch","sn","rs","sc","sl","zw","sg","sx","sk","si","so","es","sj","lk","sh","kn","lc",
+                "pm","vc","za","sd","gs","kr","ss","sr","sz","sy","tj","tw","tz","th","tg","tk","to","tt",
+                "td","cz","tn","tr","tm","tc","tv","ug","ua","hu","uy","uz","vu","va","ve","ae","us","gb",
+                "vn","gb-wls","wf","by","eh","cf","cy"};
+        try {
+            for (String flagName : flagNames) {
+                ImageFactory.createImageFile(ImageFactory.getImage("https://flagcdn.com/w2560/" + flagName + ".png"), new URI("src/main/resources/pictures/flags"), flagName);
+            }
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/insert-flag-data-into-database")
@@ -227,56 +253,47 @@ public class GameRestController {
                 "pm","vc","za","sd","gs","kr","ss","sr","sz","sy","tj","tw","tz","th","tg","tk","to","tt",
                 "td","cz","tn","tr","tm","tc","tv","ug","ua","hu","uy","uz","vu","va","ve","ae","us","gb",
                 "vn","gb-wls","wf","by","eh","cf","cy"};
-
-
-    String[] rightGuesses = {"Afghanistan","Egypt","Aland","Albania","Algeria","American Samoa","US Virgin Islands","Andorra","Angola","Anguilla","Antarctica","Antigua and Barbuda","Equatorial Guinea",
-            "Argentina","Armenia","Aruba","Azerbaijan","Ethiopia","Australia","Bahamas","Bahrain","Bangladesh","Barbados","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia and Herzegovina",
-            "Botswana","Bouvet Island","Brazil","British Virgin Islands","British Indian Ocean Territory","Brunei","Bulgaria","Burkina Faso","Burundi","Chile","China","Cook Islands","Costa Rica",
-            "Curacao","Denmark","Germany","Dominica","Dominican Republic","Djibouti","Ecuador","El Salvador","Ivory Coast","England","Eritrea","Estonia","Falkland Islands","Faroe Islands",
-            "Fiji","Finland","France","French Guiana","French Polynesia","French Southern and Antarctic Territories","Gabon","Gambia","Georgia","Ghana","Gibraltar","Grenada","Greece","Greenland",
-            "Guadeloupe","Guam","Guatemala","Guernsey","Guinea","Guinea-Bissau","Guyana","Haiti","Heard and McDonald Islands","Honduras","Hong Kong","India","Indonesia","Isle of Man","Iraq",
-            "Iran","Ireland","Iceland","Israel","Italy","Jamaica","Japan","Yemen","Jersey","Jordan","Cayman Islands","Cambodia","Cameroon","Canada","Cape Verde","Caribbean Netherlands","Kazakhstan",
-            "Qatar","Kenya","Kyrgyzstan","Kiribati","United States lesser island possessions","Cocos Islands","Colombia","Comoros","Republic of Congo","Democratic Republic of Congo","Kosovo",
-            "Croatia","Cuba","Kuwait","Laos","Lesotho","Latvia","Lebanon","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macao","Madagascar","Malawi","Malaysia","Maldives","Mali",
-            "Malta","Morocco","Marshall Islands","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Mozambique","Myanmar",
-            "Namibia","Nauru","New Caledonia","New Zealand","Nicaragua","Netherlands","Niger","Nigeria","Niue","Northern Ireland","North Korea","Northern Mariana Islands","North Macedonia",
-            "Norfolk Island","Norway","Oman","Austria","East Timor","Pakistan","Palestine","Palau","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Pitcairn Islands","Poland",
-            "Portugal","Puerto Rico","Reunion","Rwanda","Romania","Russia","Saint Barthélemy","Saint Martin","Solomon Islands","Zambia","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia",
-            "Scotland","Sweden","Switzerland","Senegal","Serbia","Seychelles","Sierra Leone","Zimbabwe","Singapore","Sint Maarten","Slovakia","Slovenia","Somalia","Spain","Spitsbergen and Jan Mayen",
-            "Sri Lanka","Saint Helenas","Saint Kitts and Nevis","Saint Lucia","Saint Pierre and Miquelon","Saint Vincent and the Grenadines","South Africa","Sudan","South Georgia and the South Sandwich Islands",
-            "South Korea","South Sudan","Suriname","Eswatini","Syria","Tajikistan","Taiwan","Tanzania","Thailand","Togo","Tokelau","Tonga","Trinidad and Tobago","Chad","Czech Republic","Tunisia",
-            "Türkiye","Turkmenistan","Turks and Caicos Islands","Tuvalu","Uganda","Ukraine","Hungary","Uruguay","Uzbekistan","Vanuatu,Vatican City","Vatican","Venezuela","United Arab Emirates",
-            "United States,USA,United States of America","United Kingdom","Vietnam","Wales","Wallis and Futuna","Belarus","Sahrawi Arab Democratic Republic","Central African Republic",
-            "Cyprus"};
-    List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures/flags"));
-    List<String> fileNames = new ArrayList<>();
-    List<String> newRightGuesses = new ArrayList<>();
+        String[] rightGuesses = {"Afghanistan","Egypt","Aland","Albania","Algeria","American Samoa","US Virgin Islands","Andorra","Angola","Anguilla","Antarctica","Antigua and Barbuda","Equatorial Guinea",
+                "Argentina","Armenia","Aruba","Azerbaijan","Ethiopia","Australia","Bahamas","Bahrain","Bangladesh","Barbados","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia and Herzegovina",
+                "Botswana","Bouvet Island","Brazil","British Virgin Islands","British Indian Ocean Territory","Brunei","Bulgaria","Burkina Faso","Burundi","Chile","China","Cook Islands","Costa Rica",
+                "Curacao","Denmark","Germany","Dominica","Dominican Republic","Djibouti","Ecuador","El Salvador","Ivory Coast","England","Eritrea","Estonia","Falkland Islands","Faroe Islands",
+                "Fiji","Finland","France","French Guiana","French Polynesia","French Southern and Antarctic Territories","Gabon","Gambia","Georgia","Ghana","Gibraltar","Grenada","Greece","Greenland",
+                "Guadeloupe","Guam","Guatemala","Guernsey","Guinea","Guinea-Bissau","Guyana","Haiti","Heard and McDonald Islands","Honduras","Hong Kong","India","Indonesia","Isle of Man","Iraq",
+                "Iran","Ireland","Iceland","Israel","Italy","Jamaica","Japan","Yemen","Jersey","Jordan","Cayman Islands","Cambodia","Cameroon","Canada","Cape Verde","Caribbean Netherlands","Kazakhstan",
+                "Qatar","Kenya","Kyrgyzstan","Kiribati","United States lesser island possessions","Cocos Islands","Colombia","Comoros","Republic of Congo","Democratic Republic of Congo","Kosovo",
+                "Croatia","Cuba","Kuwait","Laos","Lesotho","Latvia","Lebanon","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macao","Madagascar","Malawi","Malaysia","Maldives","Mali",
+                "Malta","Morocco","Marshall Islands","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Mozambique","Myanmar",
+                "Namibia","Nauru","New Caledonia","New Zealand","Nicaragua","Netherlands","Niger","Nigeria","Niue","Northern Ireland","North Korea","Northern Mariana Islands","North Macedonia",
+                "Norfolk Island","Norway","Oman","Austria","East Timor","Pakistan","Palestine","Palau","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Pitcairn Islands","Poland",
+                "Portugal","Puerto Rico","Reunion","Rwanda","Romania","Russia","Saint Barthélemy","Saint Martin","Solomon Islands","Zambia","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia",
+                "Scotland","Sweden","Switzerland","Senegal","Serbia","Seychelles","Sierra Leone","Zimbabwe","Singapore","Sint Maarten","Slovakia","Slovenia","Somalia","Spain","Spitsbergen and Jan Mayen",
+                "Sri Lanka","Saint Helenas","Saint Kitts and Nevis","Saint Lucia","Saint Pierre and Miquelon","Saint Vincent and the Grenadines","South Africa","Sudan","South Georgia and the South Sandwich Islands",
+                "South Korea","South Sudan","Suriname","Eswatini","Syria","Tajikistan","Taiwan","Tanzania","Thailand","Togo","Tokelau","Tonga","Trinidad and Tobago","Chad","Czech Republic","Tunisia",
+                "Türkiye","Turkmenistan","Turks and Caicos Islands","Tuvalu","Uganda","Ukraine","Hungary","Uruguay","Uzbekistan","Vanuatu,Vatican City","Vatican","Venezuela","United Arab Emirates",
+                "United States,USA,United States of America","United Kingdom","Vietnam","Wales","Wallis and Futuna","Belarus","Sahrawi Arab Democratic Republic","Central African Republic",
+                "Cyprus"};
+        List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures/flags"));
+        List<String> fileNames = new ArrayList<>();
+        List<String> newRightGuesses = new ArrayList<>();
         for (File file : files) {
-        fileNames.add(file.getName().substring(0,file.getName().length()-4));
-    }
+            fileNames.add(file.getName().substring(0,file.getName().length()-4));
+        }
         for (String fileName : fileNames) {
-        for (int j = 0; j < flagNames.length; j++) {
-            if (fileName.equals(flagNames[j])) {
-                newRightGuesses.add(rightGuesses[j]);
+            for (int j = 0; j < flagNames.length; j++) {
+                if (fileName.equals(flagNames[j])) {
+                    newRightGuesses.add(rightGuesses[j]);
+                }
             }
         }
-    }
         try {
-        insertIntoDB(ImageFactory.getFilesInFolder(
-                        new File("src/main/resources/pictures/flags")),
-                newRightGuesses,
-                "Flags");
-    } catch (IOException e) {
-
-        throw new RuntimeException(e);
+            insertIntoDB(ImageFactory.getFilesInFolder(new File("src/main/resources/pictures/flags")),newRightGuesses,"Flags");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-}
 
-@GetMapping("/debug")
-public void debugging(){}
-
-private String getFileName(File file){
-        return file.getName().substring(0,file.getName().length()-4);}
+    @GetMapping("/debug")
+    public void debugging(){}
 
     private void insertIntoDB(List<File> files, List<String> right_guess,String Category) throws IOException {
         int counter = 0;
