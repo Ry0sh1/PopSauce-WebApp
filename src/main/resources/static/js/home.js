@@ -39,6 +39,7 @@ function joinGame(){
             }
         })
 }
+
 document.getElementById("input-code").addEventListener('keydown', (event)=>{
     if (event.key==="Enter"){
         joinGame();

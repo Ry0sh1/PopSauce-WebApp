@@ -12,10 +12,12 @@ import com.ryoshi.PopSauce.repository.*;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.Buffer;
 import java.util.*;
 
 @RestController
@@ -304,7 +306,12 @@ public class GameRestController {
             pictureRepository.save(pic);
             counter++;
         }
-
+    }
+    private void insertIntoDB(BufferedImage image, String category, String right_guess) throws IOException {
+        byte[] imageData = ImageFactory.getImageAsBytes(image);
+        String base64Image = Base64.getEncoder().encodeToString(imageData);
+        Pictures pic = new Pictures(category,base64Image,right_guess);
+        pictureRepository.save(pic);
     }
 
 }

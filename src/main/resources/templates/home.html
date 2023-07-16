@@ -49,6 +49,17 @@
         Join Game
       </button>
     </div>
+    <form class="home-field" action="/upload-own-picture" method="post">
+      <h2>Upload your own Picture</h2>
+      <label for="picture-url">Enter Picture</label>
+      <input id="picture-url" type="url" name="url" class="home-input">
+      <label for="picture-category">Enter Picture Category</label>
+      <input id="picture-category" name="category" class="home-input">
+      <label for="picture-rightGuesses">Enter All Right Guesses in this Format "first,second,third,..."</label>
+      <input id="picture-rightGuesses" name="rightGuesses" class="home-input">
+      <label class="invisible" id="invalid-image">Something went wrong</label>
+      <input type="submit" class="home-button">
+    </form>
   </div>
 </div>
 <script src="/js/home.js"></script>
