@@ -46,11 +46,12 @@ public class BoardController {
             insertIntoDB(image,category,rightGuesses);
             category = category.replace(" ","");
             category = category.replace(".","");
+            String[] rightGuessesArray = rightGuesses.split(",");
             File newFile = new File("src/main/resources/pictures/"+category);
             if (!newFile.exists()){
                 newFile.mkdirs();
             }
-            ImageFactory.createImageFile(image, new URI("src/main/resources/pictures/"+category), rightGuesses);
+            ImageFactory.createImageFile(image, new URI("src/main/resources/pictures/"+category), rightGuessesArray[0]);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {

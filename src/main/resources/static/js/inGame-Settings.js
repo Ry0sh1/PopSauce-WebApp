@@ -6,6 +6,8 @@ document.getElementById('chat-input').addEventListener('keydown',(event)=>{
 
 inputElement.addEventListener('keydown', (event)=>{
     if (event.key==="Enter"){
-        rightAnswer();
+        if (!alreadyGuessedRight){
+            rightAnswer();
+        }
     }
 })

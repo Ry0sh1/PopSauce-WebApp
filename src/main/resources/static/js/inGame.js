@@ -1,7 +1,7 @@
 let stompClient = null;
 
 let currentPicture;
-const h1Element = document.getElementById('anime');
+const h1Element = document.getElementById('result');
 const timerElement = document.getElementById('timer');
 let players = [];
 let username = localStorage.getItem('username');
@@ -9,6 +9,7 @@ const code = window.location.href.slice(window.location.href.length-4,window.loc
 let host = false;
 let isShowingResult;
 let timer;
+let alreadyGuessedRight = false;
 
 //Playground
 const inputElement = document.getElementById('input');
@@ -42,15 +43,23 @@ function setStart(){
 //Game gets Started
 function start(){
 
+    resetPoints();
+
     //Show Playground
     inputElement.classList.remove('invisible');
     inputLabelElement.classList.remove('invisible');
     goButton.classList.remove('invisible');
     document.getElementById('timer').classList.remove('invisible');
+    document.getElementById('picture-here').classList.remove("invisible");
 
     //Remove Start Button
-    document.getElementById('start-button').remove();
-    document.getElementById('waiting').remove();
+    document.getElementById('start-button').classList.add("invisible");
+    document.getElementById('waiting').classList.add("invisible");
+    document.getElementById("play-again-button").classList.add("invisible");
+    document.getElementById("winner").classList.add("invisible");
+    document.getElementById("play-again-button").classList.add("invisible");
+    document.getElementById("play-again-button").disabled = true;
+    document.getElementById("start-button").disabled = true;
 
     refreshPicture();
 }
@@ -66,6 +75,7 @@ function hideResult(){
         let wrongAnswerElement = document.getElementById(`player-field-wrongAnswer-${player.username}`);
         wrongAnswerElement.innerText = '';
     });
+    alreadyGuessedRight = false;
 }
 function rightAnswer(){
     if (!isShowingResult){
@@ -81,6 +91,7 @@ function rightAnswer(){
                 );
                 inputLabelElement.classList.add('right-answer');
                 goButton.classList.add('invisible');
+                alreadyGuessedRight = true;
                 return;
             }
         }
@@ -187,9 +198,41 @@ function onMessageReceived(payload){
         if (message.messageType === 'LEAVE'){
             removePlayer(message);
         }
+        if (message.messageType === 'END'){
+            endGame(message);
+        }
     }
 }
 
+//Game End
+function endGame(message){
+    //Hide Playground
+    inputElement.classList.add('invisible');
+    inputLabelElement.classList.add('invisible');
+    goButton.classList.add('invisible');
+    document.getElementById('timer').classList.add('invisible');
+    document.getElementById('picture-here').classList.add("invisible");
+    h1Element.classList.add("invisible");
+
+    //Show Winner
+    let winnerField = document.getElementById("winner");
+    winnerField.classList.remove("invisible");
+    winnerField.innerText = `${message.sender} won the Game`;
+    let startButton = document.getElementById("play-again-button");
+    startButton.classList.remove("invisible");
+    startButton.disabled = false;
+}
+function playAgain(){
+    stompClient.send("/app/game.playAgain",
+        {},
+        JSON.stringify({gameCode:code,sender:username,messageType:'PLAY_AGAIN'})
+    );
+}
+function resetPoints(){
+    players.forEach(player =>{
+        document.getElementById(`player-field-points-${player.username}`).innerText = "0";
+    })
+}
 
 //Updating Points and Player on Change
 function refreshPoints(message){
@@ -248,7 +291,6 @@ function removePlayer(message){
         }
     }
 }
-
 
 //Only for player who joins after the games started!!!
 function fetchTime(){

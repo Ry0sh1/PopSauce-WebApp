@@ -3,7 +3,7 @@
   height: 600px;
   object-fit: contain;
 }
-#anime, #timer{
+#timer{
   text-align: center;
   font-size: 34px;
   font-family: Arial,serif;
@@ -32,7 +32,7 @@
 .right-answer{
   color: #00d900;
 }
-#go, #start-button{
+#go, #start-button, #play-again-button{
   width: 100px;
   padding: 6px;
   border-radius: 60px;

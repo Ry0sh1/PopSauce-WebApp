@@ -9,6 +9,8 @@ public enum MessageType {
     TIME,
     START,
     PICTURE,
-    POINTS
+    POINTS,
+    END,
+    PLAY_AGAIN
 
 }

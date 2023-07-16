@@ -1,9 +1,7 @@
 package com.ryoshi.PopSauce.controller;
 
-import com.ryoshi.PopSauce.entity.Game;
-import com.ryoshi.PopSauce.entity.Message;
-import com.ryoshi.PopSauce.entity.MessageType;
-import com.ryoshi.PopSauce.entity.Player;
+import com.ryoshi.PopSauce.entity.*;
+import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGame;
 import com.ryoshi.PopSauce.entity.PlayerToGame.PlayerToGame;
 import com.ryoshi.PopSauce.repository.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class MessageController {
@@ -90,7 +89,50 @@ public class MessageController {
     public Message addPoints(@Payload Message message){
         Player player = playerRepository.findByUsername(message.getSender());
         player.setPoints(player.getPoints()+((Integer) message.getContent()));
-        playerRepository.save(player);
+        if (player.getPoints()>=100){
+            message.setMessageType(MessageType.END);
+            message.setContent(message.getSender() + " won the Game");
+            Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
+            game.setStarted(false);
+            List<PlayerToGame> allPlayerToGame = playerToGameRepository.findAllByGame(game);
+            for (PlayerToGame playerToGame:allPlayerToGame) {
+                playerToGame.getPlayers().setPoints(0);
+                playerRepository.save(playerToGame.getPlayers());
+            }
+            gameRepository.save(game);
+        }else {
+            playerRepository.save(player);
+        }
+        return message;
+    }
+
+    @MessageMapping("/game.playAgain")
+    @SendTo("/start-game/game")
+    public Message playAgain(@Payload Message message){
+
+        Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
+        pictureToGameRepository.deleteAll(pictureToGameRepository.findAllByGames(game));
+
+        List<Pictures> pictures = pictureRepository.findAllByCategory(game.getSetting().getCategory());
+        //Shuffle The list
+        for (int i = 0;i<pictures.size();i++){
+            Pictures first = pictures.get(i);
+            int random = (int) (Math.floor(Math.random()*pictures.size()));
+            pictures.set(i,pictures.get(random));
+            pictures.set(random,first);
+        }
+        //Insert List
+        for (int i = 0;i < pictures.size();i++){
+            pictureToGameRepository.save(new PictureToGame(game,pictures.get(i),i));
+        }
+
+        game.setCurrentPicture(pictureToGameRepository.findByGamesAndPlace(game,0).orElseThrow().getPictures());
+        game.setCurrentTimer(game.getSetting().getGuessTimer()+game.getSetting().getResultTimer());
+
+        game.setStarted(true);
+        gameRepository.save(game);
+
+        message.setMessageType(MessageType.START);
         return message;
     }
 
