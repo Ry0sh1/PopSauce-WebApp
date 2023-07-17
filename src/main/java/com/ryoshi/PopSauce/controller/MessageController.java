@@ -132,7 +132,7 @@ public class MessageController {
         game.setStarted(true);
         gameRepository.save(game);
 
-        message.setMessageType(MessageType.START);
+        message.setMessageType(MessageType.PLAY_AGAIN);
         return message;
     }
 

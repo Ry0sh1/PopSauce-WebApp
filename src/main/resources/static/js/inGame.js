@@ -125,16 +125,11 @@ function refreshPicture() {
 function refreshTimer(){
     if (isShowingResult){
         timerElement.innerText = timer;
-        if (timer===0){
-            isShowingResult = false;
-            hideResult();
-            refreshPicture();
-        }
+    }else if (timer-resultTime === -1){
+        isShowingResult = true;
+        showResult();
+        timerElement.innerText = timer;
     }else {
-        if (timer-resultTime===0){
-            isShowingResult = true;
-            showResult();
-        }
         timerElement.innerText = "" + (timer-resultTime);
     }
 }
@@ -177,6 +172,9 @@ function onMessageReceived(payload){
         }
         if (message.messageType === 'TIME'){
             timer = parseInt(message.content);
+            if (timer === guessTime+resultTime){
+                isShowingResult = false;
+            }
             refreshTimer();
         }
         if (message.messageType === 'START'){
@@ -187,6 +185,7 @@ function onMessageReceived(payload){
         }
         if (message.messageType === 'PICTURE'){
             currentPicture = message.content;
+            hideResult();
             refreshPicture();
         }
         if (message.messageType === 'POINTS'){
@@ -200,6 +199,11 @@ function onMessageReceived(payload){
         }
         if (message.messageType === 'END'){
             endGame(message);
+        }
+        if (message.messageType === 'PLAY_AGAIN'){
+            fetchTime();
+            fetchCurrentPicture();
+            start(); //Make sure to start after both got fetched
         }
     }
 }
