@@ -1,7 +1,6 @@
 let stompClient = null;
 
 let currentPicture;
-const h1Element = document.getElementById('result');
 const timerElement = document.getElementById('timer');
 let players = [];
 let username = localStorage.getItem('username');
@@ -47,12 +46,13 @@ function start(){
 
     //Show Playground
     inputElement.classList.remove('invisible');
-    inputLabelElement.classList.remove('invisible');
-    goButton.classList.remove('invisible');
     document.getElementById('timer').classList.remove('invisible');
     document.getElementById('picture-here').classList.remove("invisible");
+    document.getElementById('guess-container').classList.remove("invisible");
+    document.getElementById('guess-field').classList.remove("invisible");
 
     //Remove Start Button
+    document.getElementById('field').classList.add('invisible');
     document.getElementById('start-button').classList.add("invisible");
     document.getElementById('waiting').classList.add("invisible");
     document.getElementById("play-again-button").classList.add("invisible");
@@ -64,18 +64,16 @@ function start(){
     refreshPicture();
 }
 function showResult(){
-    h1Element.innerText = currentPicture.rightGuess.split(',')[0];
-    goButton.classList.add('invisible');
+    document.getElementById('question').innerText = currentPicture.rightGuess.split(',')[0];
 }
 function hideResult(){
-    h1Element.innerText = "";
-    goButton.classList.remove('invisible');
-    inputLabelElement.classList.remove('right-answer');
+    document.getElementById('question').innerText = "Where is this picture from?";
     players.forEach(player=>{
         let wrongAnswerElement = document.getElementById(`player-field-wrongAnswer-${player.username}`);
         wrongAnswerElement.innerText = '';
     });
     alreadyGuessedRight = false;
+    document.getElementById('input-field').classList.remove("invisible");
 }
 function rightAnswer(){
     if (!isShowingResult){
@@ -89,8 +87,7 @@ function rightAnswer(){
                     {},
                     JSON.stringify({gameCode:code,sender:username,content:10,messageType:'POINTS'})
                 );
-                inputLabelElement.classList.add('right-answer');
-                goButton.classList.add('invisible');
+                document.getElementById('input-field').classList.add("invisible");
                 alreadyGuessedRight = true;
                 return;
             }
@@ -212,14 +209,13 @@ function onMessageReceived(payload){
 function endGame(message){
     //Hide Playground
     inputElement.classList.add('invisible');
-    inputLabelElement.classList.add('invisible');
-    goButton.classList.add('invisible');
     document.getElementById('timer').classList.add('invisible');
     document.getElementById('picture-here').classList.add("invisible");
-    h1Element.classList.add("invisible");
+    document.getElementById('guess-container').classList.add("invisible");
 
     //Show Winner
     let winnerField = document.getElementById("winner");
+    document.getElementById('field').classList.remove('invisible');
     winnerField.classList.remove("invisible");
     winnerField.innerText = `${message.sender} won the Game`;
     let startButton = document.getElementById("play-again-button");
@@ -252,6 +248,7 @@ function newPlayer(message){
         const container = document.getElementById('all-player');
         const newContainer = document.createElement('div');
         newContainer.classList.add('player-field');
+        newContainer.classList.add('flex');
         const usernameElement = document.createElement('p');
         const pointsElement = document.createElement('p');
         const wrongAnswerElement = document.createElement('p');
@@ -272,7 +269,7 @@ function newPlayer(message){
 }
 function newChatMessage(message){
     const chat = document.getElementById('chat-list');
-    const newMessage = document.createElement('li');
+    const newMessage = document.createElement('p');
     if (message.messageType === 'JOIN'){
         newMessage.innerText = `${message.sender} joined the Game!`;
     }else if (message.messageType === 'LEAVE'){

@@ -10,7 +10,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -58,7 +57,6 @@ public class MessageController {
             Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
             Player newPlayer = new Player();
             newPlayer.setUsername(message.getSender());
-            newPlayer.setPoints(0);
             if (playerRepository.findByUsername(message.getSender()) != null){
                 long id = playerRepository.findByUsername(message.getSender()).getId();
                 newPlayer.setId(id);
@@ -66,7 +64,7 @@ public class MessageController {
             }else {
                 playerRepository.save(newPlayer);
             }
-            playerToGameRepository.save(new PlayerToGame(game,newPlayer));
+            playerToGameRepository.save(new PlayerToGame(game,newPlayer, 0));
         }
         return message;
     }
@@ -88,20 +86,21 @@ public class MessageController {
     @SendTo("/start-game/game")
     public Message addPoints(@Payload Message message){
         Player player = playerRepository.findByUsername(message.getSender());
-        player.setPoints(player.getPoints()+((Integer) message.getContent()));
-        if (player.getPoints()>=100){
+        Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
+        PlayerToGame playerToGame = playerToGameRepository.findByPlayersAndGame(player,game);
+        playerToGame.setPoints(playerToGame.getPoints()+((Integer) message.getContent()));
+        if (playerToGame.getPoints()>=100){
             message.setMessageType(MessageType.END);
             message.setContent(message.getSender() + " won the Game");
-            Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
             game.setStarted(false);
             List<PlayerToGame> allPlayerToGame = playerToGameRepository.findAllByGame(game);
-            for (PlayerToGame playerToGame:allPlayerToGame) {
-                playerToGame.getPlayers().setPoints(0);
-                playerRepository.save(playerToGame.getPlayers());
+            for (PlayerToGame playerGame:allPlayerToGame) {
+                playerGame.setPoints(0);
+                playerToGameRepository.save(playerGame);
             }
             gameRepository.save(game);
         }else {
-            playerRepository.save(player);
+            playerToGameRepository.save(playerToGame);
         }
         return message;
     }

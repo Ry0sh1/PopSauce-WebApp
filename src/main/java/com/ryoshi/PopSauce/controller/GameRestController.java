@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.Buffer;
 import java.util.*;
 
 @RestController
@@ -114,7 +113,7 @@ public class GameRestController {
         gameRepository.save(game);
 
         //Set Up the host
-        playerToGameRepository.save(new PlayerToGame(game,host));
+        playerToGameRepository.save(new PlayerToGame(game,host, 0));
         playerRepository.save(host);
         return code.toString();
     }
@@ -126,7 +125,7 @@ public class GameRestController {
         StringBuilder json = new StringBuilder();
         json.append("[");
         for (PlayerToGame playerToGame:players) {
-            json.append("{\"username\":\"").append(playerToGame.getPlayers().getUsername()).append("\",\"points\":").append(playerToGame.getPlayers().getPoints()).append("},");
+            json.append("{\"username\":\"").append(playerToGame.getPlayers().getUsername()).append("\",\"points\":").append(playerToGame.getPoints()).append("},");
         }
         json.deleteCharAt(json.length()-1);
         json.append("]");

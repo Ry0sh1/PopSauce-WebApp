@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS pictures(
 CREATE TABLE IF NOT EXISTS player(
     id BIGSERIAL,
     username TEXT,
-    points INT,
     primary key (id)
 );
 CREATE TABLE IF NOT EXISTS setting(
@@ -39,6 +38,7 @@ CREATE TABLE IF NOT EXISTS pictures_games(
 CREATE TABLE IF NOT EXISTS game_players(
     players_id BIGINT,
     game_id BIGINT,
+    points INT,
     PRIMARY KEY (players_id,game_id)
 );
 

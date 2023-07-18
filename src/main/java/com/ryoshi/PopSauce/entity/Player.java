@@ -10,17 +10,14 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private int points;
 
-    public Player(Long id, String username, int points) {
+    public Player(Long id, String username) {
         this.id = id;
         this.username = username;
-        this.points = points;
     }
 
     public Player(String username, int points) {
         this.username = username;
-        this.points = points;
     }
 
     public Player() {
@@ -42,11 +39,4 @@ public class Player {
         this.username = username;
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
 }

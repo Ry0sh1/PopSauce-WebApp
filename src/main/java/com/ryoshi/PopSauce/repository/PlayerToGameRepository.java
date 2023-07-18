@@ -12,5 +12,6 @@ public interface PlayerToGameRepository extends CrudRepository<PlayerToGame, Pla
 
     List<PlayerToGame> findAllByGame(Game game);
     PlayerToGame findByPlayers(Player player);
+    PlayerToGame findByPlayersAndGame(Player players, Game game);
 
 }
