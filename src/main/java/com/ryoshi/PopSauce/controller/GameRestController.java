@@ -296,6 +296,26 @@ public class GameRestController {
     @GetMapping("/debug")
     public void debugging(){}
 
+    private void insertIntoDB(List<File> files, List<String> right_guess,String Category,List<String> difficulty) throws IOException {
+        int counter = 0;
+        for (File file:files) {
+            byte[] imageData = ImageFactory.getImageAsBytes(file);
+            String base64Image = Base64.getEncoder().encodeToString(imageData);
+            Pictures pic = new Pictures(Category,base64Image,right_guess.get(counter), difficulty.get(counter));
+            pictureRepository.save(pic);
+            counter++;
+        }
+    }
+    private void insertIntoDB(List<File> files, List<String> right_guess,String Category, String difficulty) throws IOException {
+        int counter = 0;
+        for (File file:files) {
+            byte[] imageData = ImageFactory.getImageAsBytes(file);
+            String base64Image = Base64.getEncoder().encodeToString(imageData);
+            Pictures pic = new Pictures(Category,base64Image,right_guess.get(counter), difficulty);
+            pictureRepository.save(pic);
+            counter++;
+        }
+    }
     private void insertIntoDB(List<File> files, List<String> right_guess,String Category) throws IOException {
         int counter = 0;
         for (File file:files) {
@@ -306,10 +326,10 @@ public class GameRestController {
             counter++;
         }
     }
-    private void insertIntoDB(BufferedImage image, String category, String right_guess) throws IOException {
+    private void insertIntoDB(BufferedImage image, String category, String right_guess, String difficulty) throws IOException {
         byte[] imageData = ImageFactory.getImageAsBytes(image);
         String base64Image = Base64.getEncoder().encodeToString(imageData);
-        Pictures pic = new Pictures(category,base64Image,right_guess);
+        Pictures pic = new Pictures(category,base64Image,right_guess, difficulty);
         pictureRepository.save(pic);
     }
 

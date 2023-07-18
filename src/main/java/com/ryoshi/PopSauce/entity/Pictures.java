@@ -1,12 +1,7 @@
 package com.ryoshi.PopSauce.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-
-import java.util.List;
 
 @Entity
 public class Pictures {
@@ -18,12 +13,15 @@ public class Pictures {
     private String content;
     @Value("right_guess")
     private String rightGuess;
+    private String difficulty;
 
-    public Pictures(Long id, String category, String content, String rightGuess) {
+
+    public Pictures(Long id, String category, String content, String rightGuess, String difficulty) {
         this.id = id;
         this.category = category;
         this.content = content;
         this.rightGuess = rightGuess;
+        this.difficulty = difficulty;
     }
 
     public Pictures(String category, String content, String rightGuess) {
@@ -32,7 +30,22 @@ public class Pictures {
         this.rightGuess = rightGuess;
     }
 
+    public Pictures(String category, String content, String rightGuess, String difficulty) {
+        this.category = category;
+        this.content = content;
+        this.rightGuess = rightGuess;
+        this.difficulty = difficulty;
+    }
+
     public Pictures() {
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
     public Long getId() {

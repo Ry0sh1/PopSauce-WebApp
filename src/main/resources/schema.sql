@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS pictures(
     content TEXT,
     category TEXT,
     right_guess text,
+    difficulty text,
     primary key (id)
 );
 

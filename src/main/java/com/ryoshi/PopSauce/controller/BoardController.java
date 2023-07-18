@@ -18,7 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.HashSet;
-import java.util.List;
 
 @Controller
 @RequestMapping("")
@@ -40,10 +39,11 @@ public class BoardController {
     public String uploadOwnPicture(
             @RequestParam("url") String url,
             @RequestParam("category") String category,
-            @RequestParam("rightGuesses") String rightGuesses){
+            @RequestParam("rightGuesses") String rightGuesses,
+            @RequestParam("difficulty") String difficulty){
         try {
             BufferedImage image = ImageFactory.getImage(url);
-            insertIntoDB(image,category,rightGuesses);
+            insertIntoDB(image,category,rightGuesses,difficulty);
             category = category.replace(" ","");
             category = category.replace(".","");
             String[] rightGuessesArray = rightGuesses.split(",");
@@ -60,10 +60,10 @@ public class BoardController {
         return "home";
     }
 
-    private void insertIntoDB(BufferedImage image, String category, String right_guess) throws IOException {
+    private void insertIntoDB(BufferedImage image, String category, String right_guess, String difficulty) throws IOException {
         byte[] imageData = ImageFactory.getImageAsBytes(image);
         String base64Image = Base64.getEncoder().encodeToString(imageData);
-        Pictures pic = new Pictures(category,base64Image,right_guess);
+        Pictures pic = new Pictures(category,base64Image,right_guess, difficulty);
         pictureRepository.save(pic);
     }
 
