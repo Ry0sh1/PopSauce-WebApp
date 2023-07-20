@@ -1,16 +1,29 @@
+
+body{
+  background-color: var(--background-color);
+  padding: 0;
+  margin: 0;
+}
+body::-webkit-scrollbar{
+  width: 14px;
+}
+body::-webkit-scrollbar-track{
+  background-color: var(--background-color-light);
+}
+body::-webkit-scrollbar-thumb{
+  background-color: var(--field-color);
+  border-radius: 100px;
+}
 .content{
-  width: 800px;
-  background-color: #d9d9d9;
+  width: 860px;
+  background-color: var(--background-color-light);
   margin: 0 auto 0 auto;
   padding: 6px 32px;
+  box-shadow: 0 0 6px black;
 }
 h1, p, button, div, input, label, h2{
   font-family: Arial,serif;
-}
-body{
-  background-color: rgb(68, 80, 97);
-  padding: 0;
-  margin: 0;
+  color: var(--font-color);
 }
 .home-header{
   font-size: 42px;
@@ -32,13 +45,17 @@ body{
   font-weight: bold;
   cursor: pointer;
   margin-top: 20px;
+  box-shadow: 0 0 6px black;
 }
 .home-input{
   padding: 8px 20px;
   border-radius: 40px;
-  border: #7bb622 solid 1px;
+  border: none;
+  background-color: var(--field-color);
+  box-shadow: 0 0 6px black;
   margin-left: 10px;
   margin-top: 6px;
+  margin-bottom: 16px;
 }
 .home-field{
   display: flex;

@@ -1,14 +1,16 @@
 .content{
-  width: 800px;
-  background-color: #d9d9d9;
+  width: 860px;
+  background-color: var(--background-color-light);
   margin: 0 auto 0 auto;
   padding: 6px 32px;
+  box-shadow: 0 0 6px black;
 }
 h1, p, button, div, input, label, h2, section, option{
   font-family: Arial,serif;
+  color: var(--font-color);
 }
 body{
-  background-color: rgb(68, 80, 97);
+  background-color: var(--background-color);
   padding: 0;
   margin: 0;
 }
@@ -21,10 +23,15 @@ body{
 .create-game-input{
   padding: 8px 20px;
   border-radius: 40px;
-  border: #7bb622 solid 1px;
+  border: none;
+  background-color: var(--background-color-light);
   margin-left: 10px;
   margin-top: 6px;
   font-size: 26px;
+  box-shadow: 0 0 6px black;
+}
+.create-game-input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
 }
 .create-game-field{
   display: flex;
@@ -39,7 +46,7 @@ body{
   margin-right: 10px;
 }
 .create-game-button{
-  background-color: #7bb622;
+  background-color: var(--green);
   padding: 8px 20px;
   border:none;
   border-radius: 40px;
@@ -48,6 +55,7 @@ body{
   cursor: pointer;
   margin-top: 20px;
   transition: all 0.15s;
+  box-shadow: 0 0 6px black;
 }
 .create-game-button:hover{
   opacity: 0.7;
@@ -60,6 +68,9 @@ body{
 #category{
   font-size: 26px;
   padding: 4px 8px;
-  border: #7bb622 solid 1px;
+  border: none;
   border-radius: 20px;
+  background-color: var(--background-color-light);
+  box-shadow: 0 0 6px black;
+  color: var(--font-color);
 }
