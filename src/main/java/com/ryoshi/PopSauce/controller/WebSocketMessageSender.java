@@ -41,14 +41,14 @@ public class WebSocketMessageSender {
         message.setSender(game.getCode());
         message.setMessageType(MessageType.TIME);
         message.setContent(String.valueOf(game.getCurrentTimer()));
-        messagingTemplate.convertAndSend("/start-game/game",message);
+        messagingTemplate.convertAndSend("/start-game/game/"+game.getCode(),message);
     }
     public void sendNewPicture(Game game, Message message) {
         message.setGameCode(game.getCode());
         message.setSender(game.getCode());
         message.setMessageType(MessageType.PICTURE);
         message.setContent(game.getCurrentPicture());
-        messagingTemplate.convertAndSend("/start-game/game",message);
+        messagingTemplate.convertAndSend("/start-game/game/"+game.getCode(),message);
     }
 
     @EventListener
@@ -77,7 +77,7 @@ public class WebSocketMessageSender {
             if (game.getHost() == player){
                 game.setHost(playerToGameRepository.findAllByGame(game).get(0).getPlayers());
             }
-            messagingTemplate.convertAndSend("/start-game/game", chatMessage);
+            messagingTemplate.convertAndSend("/start-game/game/"+game.getCode(), chatMessage);
         }
     }
 

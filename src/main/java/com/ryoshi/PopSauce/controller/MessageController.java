@@ -4,6 +4,7 @@ import com.ryoshi.PopSauce.entity.*;
 import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGame;
 import com.ryoshi.PopSauce.entity.PlayerToGame.PlayerToGame;
 import com.ryoshi.PopSauce.repository.*;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -36,20 +37,20 @@ public class MessageController {
         this.playerToGameRepository = playerToGameRepository;
     }
 
-    @MessageMapping("/game.wrongAnswer")
-    @SendTo("/start-game/game")
+    @MessageMapping("/game.wrongAnswer/{gameCode}")
+    @SendTo("/start-game/game/{gameCode}")
     public Message wrongAnswer(@Payload Message message){
         return message;
     }
 
-    @MessageMapping("/game.chat")
-    @SendTo("/start-game/game")
+    @MessageMapping("/game.chat/{gameCode}")
+    @SendTo("/start-game/game/{gameCode}")
     public Message chatMessage(@Payload Message message){
         return message;
     }
 
-    @MessageMapping("/game.join")
-    @SendTo("/start-game/game")
+    @MessageMapping("/game.join/{gameCode}")
+    @SendTo("/start-game/game/{gameCode}")
     public Message joinChat(@Payload Message message, SimpMessageHeaderAccessor headerAccessor){
         if (message.getMessageType() == MessageType.JOIN){
             headerAccessor.getSessionAttributes().put("username",message.getSender());
@@ -69,8 +70,8 @@ public class MessageController {
         return message;
     }
 
-    @MessageMapping("/game.start")
-    @SendTo("/start-game/game")
+    @MessageMapping("/game.start/{gameCode}")
+    @SendTo("/start-game/game/{gameCode}")
     public Message gameGotStarted(@Payload Message message){
         Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
         if (message.getSender().equals(game.getHost().getUsername())){
@@ -82,8 +83,8 @@ public class MessageController {
         }
     }
 
-    @MessageMapping("/game.addPoints")
-    @SendTo("/start-game/game")
+    @MessageMapping("/game.addPoints/{gameCode}")
+    @SendTo("/start-game/game/{gameCode}")
     public Message addPoints(@Payload Message message){
         Player player = playerRepository.findByUsername(message.getSender());
         Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
@@ -105,8 +106,8 @@ public class MessageController {
         return message;
     }
 
-    @MessageMapping("/game.playAgain")
-    @SendTo("/start-game/game")
+    @MessageMapping("/game.playAgain/{gameCode}")
+    @SendTo("/start-game/game/{gameCode}")
     public Message playAgain(@Payload Message message){
 
         Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();

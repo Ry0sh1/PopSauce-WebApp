@@ -23,7 +23,7 @@ const resultTime = parseInt(document.getElementById('set-result-timer').innerTex
 function sendMessage(){
     const content = document.getElementById('chat-input').value;
     document.getElementById('chat-input').value = '';
-    stompClient.send("/app/game.chat",
+    stompClient.send("/app/game.chat/"+code,
         {},
         JSON.stringify({gameCode:code,sender:username,content:content,messageType:'CHAT'})
     );
@@ -32,7 +32,7 @@ function sendMessage(){
 
 //Only for Hosts to start the game!
 function setStart(){
-    stompClient.send("/app/game.start",
+    stompClient.send("/app/game.start/"+code,
         {},
         JSON.stringify({gameCode:code,sender:username,messageType:'START'})
     );
@@ -83,7 +83,7 @@ function rightAnswer(){
         inputElement.value = '';
         for (let i = 0; i < result.length;i++){
             if (input === result[i]){
-                stompClient.send("/app/game.addPoints",
+                stompClient.send("/app/game.addPoints/"+code,
                     {},
                     JSON.stringify({gameCode:code,sender:username,content:10,messageType:'POINTS'})
                 );
@@ -92,7 +92,7 @@ function rightAnswer(){
                 return;
             }
         }
-        stompClient.send("/app/game.wrongAnswer",
+        stompClient.send("/app/game.wrongAnswer/"+code,
             {},
             JSON.stringify({gameCode:code,sender:username,content:trueInput,messageType:'WRONG_ANSWER'})
         );
@@ -142,8 +142,8 @@ function onError(){
     console.log("Error trying to connect to a WebSocket")
 }
 function onConnected(){
-    stompClient.subscribe("/start-game/game", onMessageReceived);
-    stompClient.send("/app/game.join",
+    stompClient.subscribe("/start-game/game/"+code, onMessageReceived);
+    stompClient.send("/app/game.join/"+code,
         {},
         JSON.stringify({gameCode:code,sender:username,messageType:'JOIN'})
     );
@@ -223,7 +223,7 @@ function endGame(message){
     startButton.disabled = false;
 }
 function playAgain(){
-    stompClient.send("/app/game.playAgain",
+    stompClient.send("/app/game.playAgain/"+code,
         {},
         JSON.stringify({gameCode:code,sender:username,messageType:'PLAY_AGAIN'})
     );
