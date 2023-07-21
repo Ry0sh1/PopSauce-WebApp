@@ -69,6 +69,7 @@ function showResult(){
 function hideResult(){
     document.getElementById('question').innerText = "Where is this picture from?";
     players.forEach(player=>{
+        console.log(player.username);
         let wrongAnswerElement = document.getElementById(`player-field-wrongAnswer-${player.username}`);
         wrongAnswerElement.innerText = '';
     });
@@ -148,9 +149,7 @@ function onConnected(){
         JSON.stringify({gameCode:code,sender:username,messageType:'JOIN'})
     );
     fetchPlayers();
-    fetchTime();
     fetchStatus();
-    fetchCurrentPicture();
 }
 
 connect();
@@ -244,11 +243,12 @@ function displayWrongAnswer(message){
     wrongAnswerElement.innerText = message.content;
 }
 function newPlayer(message){
-    if (document.getElementById(`player-field-username-${message.sender}`)==null){
+    if (document.getElementById(`player-field-${message.sender}`)==null){
         const container = document.getElementById('all-player');
         const newContainer = document.createElement('div');
         newContainer.classList.add('player-field');
         newContainer.classList.add('flex');
+        newContainer.id = `player-field-${message.sender}`;
         const usernameElement = document.createElement('p');
         const pointsElement = document.createElement('p');
         const wrongAnswerElement = document.createElement('p');
@@ -284,10 +284,11 @@ function removePlayer(message){
     document.getElementById(`player-field-username-${message.sender}`).remove();
     document.getElementById(`player-field-points-${message.sender}`).remove();
     document.getElementById(`player-field-wrongAnswer-${message.sender}`).remove();
+    document.getElementById(`player-field-${message.sender}`).remove();
     newChatMessage(message);
     for (let i = 0;i < players.length;i++){
         if (players[i].username === message.sender){
-            players.slice(i,1);
+            players.splice(i,1);
             break;
         }
     }
@@ -317,6 +318,8 @@ function fetchStatus(){
         .then(response=>response.text())
         .then(data => {
             if (data==='true'){
+                fetchTime();
+                fetchCurrentPicture();
                 start();
             }
         });
