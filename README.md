@@ -10,3 +10,5 @@ and create your own PopSauce games without ads and annoying pop-ups. In a time w
 crucial and plays a significant role, we abstain from any registration forms, so you don't have 
 to feel uncomfortable signing up again just for the sake of playing on a website. Simply enter
 your desired username and send the four-digit code to your friends!
+
+![image](https://github.com/Ry0sh1/PopSauce-WebApp/assets/130777986/d3542a0e-f25b-4457-b042-526f80559a73)
