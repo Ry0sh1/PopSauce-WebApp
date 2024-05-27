@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
-@CrossOrigin
 public class WebSocketMessageSender {
 
     private final SimpMessageSendingOperations messagingTemplate;
