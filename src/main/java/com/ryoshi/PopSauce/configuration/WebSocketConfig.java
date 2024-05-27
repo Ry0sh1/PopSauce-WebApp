@@ -10,11 +10,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+        WebSocketMessageBrokerConfigurer.super.registerStompEndpoints(registry);
+        registry.addEndpoint("ws").setAllowedOrigins("popsauce-webapp-production.up.railway.app").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        WebSocketMessageBrokerConfigurer.super.configureMessageBroker(registry);
         registry.enableSimpleBroker("/start-game");
         registry.setApplicationDestinationPrefixes("/app");
     }
