@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface PictureToGameRepository extends CrudRepository<GamePicture, Long> {
+public interface GamePictureRepository extends CrudRepository<GamePicture, Long> {
 
     List<GamePicture> findAllByGame(Game game);
     Optional<GamePicture> findByGameAndPlace(Game game, int place);

@@ -6,7 +6,7 @@ import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Message;
 import com.ryoshi.PopSauce.entity.GamePicture;
 import com.ryoshi.PopSauce.repository.GameRepository;
-import com.ryoshi.PopSauce.repository.PictureToGameRepository;
+import com.ryoshi.PopSauce.repository.GamePictureRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +16,13 @@ import java.util.List;
 public class TimerService {
 
     private final GameRepository gameRepository;
-    private final PictureToGameRepository pictureToGameRepository;
+    private final GamePictureRepository gamePictureRepository;
     private final WebSocketMessageSender webSocketMessageSender;
 
     public TimerService(GameRepository gameRepository,
-                        PictureToGameRepository pictureToGameRepository, MessageController messageController, WebSocketMessageSender webSocketMessageSender) {
+                        GamePictureRepository gamePictureRepository, MessageController messageController, WebSocketMessageSender webSocketMessageSender) {
         this.gameRepository = gameRepository;
-        this.pictureToGameRepository = pictureToGameRepository;
+        this.gamePictureRepository = gamePictureRepository;
         this.webSocketMessageSender = webSocketMessageSender;
     }
 
@@ -31,13 +31,13 @@ public class TimerService {
         List<Game> games = gameRepository.findAllByStarted(true);
         for (Game game:games) {
             if (game.getCurrentTimer()==0){
-                GamePicture picture = pictureToGameRepository.findByGameAndPicture(game, game.getCurrentPicture()).orElseThrow();
+                GamePicture picture = gamePictureRepository.findByGameAndPicture(game, game.getCurrentPicture()).orElseThrow();
                 int newPlace = picture.getPlace() + 1;
-                int amountOfPictures = pictureToGameRepository.findAllByGame(game).size();
+                int amountOfPictures = gamePictureRepository.findAllByGame(game).size();
                 if (newPlace<amountOfPictures){
-                    game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,newPlace).orElseThrow().getPicture());
+                    game.setCurrentPicture(gamePictureRepository.findByGameAndPlace(game,newPlace).orElseThrow().getPicture());
                 }else {
-                    game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
+                    game.setCurrentPicture(gamePictureRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
                 }
                 gameRepository.save(game);
                 game.setCurrentTimer(game.getSetting().getGuessTimer()+game.getSetting().getResultTimer());

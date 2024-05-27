@@ -6,7 +6,7 @@ import com.ryoshi.PopSauce.entity.GamePicture;
 import com.ryoshi.PopSauce.entity.Picture;
 import com.ryoshi.PopSauce.entity.Player;
 import com.ryoshi.PopSauce.entity.GamePlayer;
-import com.ryoshi.PopSauce.repository.PlayerToGameRepository;
+import com.ryoshi.PopSauce.repository.GamePlayerRepository;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.*;
 import org.springframework.lang.NonNull;
@@ -27,20 +27,20 @@ public class GameRestController {
     private final SettingRepository settingRepository;
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
-    private final PictureToGameRepository pictureToGameRepository;
-    private final PlayerToGameRepository playerToGameRepository;
+    private final GamePictureRepository gamePictureRepository;
+    private final GamePlayerRepository gamePlayerRepository;
     public GameRestController(PictureRepository pictureRepository,
                               SettingRepository settingRepository,
                               GameRepository gameRepository,
                               PlayerRepository playerRepository,
-                              PictureToGameRepository pictureToGameRepository,
-                              PlayerToGameRepository playerToGameRepository) {
+                              GamePictureRepository gamePictureRepository,
+                              GamePlayerRepository gamePlayerRepository) {
         this.pictureRepository = pictureRepository;
         this.settingRepository = settingRepository;
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
-        this.pictureToGameRepository = pictureToGameRepository;
-        this.playerToGameRepository = playerToGameRepository;
+        this.gamePictureRepository = gamePictureRepository;
+        this.gamePlayerRepository = gamePlayerRepository;
     }
 
     @GetMapping("/is-code-valid/{code}")
@@ -59,7 +59,7 @@ public class GameRestController {
     public String getCurrentPicture(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
         if (game.getCurrentPicture() == null){
-            game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
+            game.setCurrentPicture(gamePictureRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
         }
         Picture currentPicture = game.getCurrentPicture();
         Gson gson = new Gson();
@@ -106,14 +106,14 @@ public class GameRestController {
         }
         //Insert List
         for (int i = 0;i < pictures.size();i++){
-            pictureToGameRepository.save(new GamePicture(game,pictures.get(i),i));
+            gamePictureRepository.save(new GamePicture(game,pictures.get(i),i));
         }
 
-        game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
+        game.setCurrentPicture(gamePictureRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
         gameRepository.save(game);
 
         //Set Up the host
-        playerToGameRepository.save(new GamePlayer(game,host, 0));
+        gamePlayerRepository.save(new GamePlayer(game,host, 0));
         playerRepository.save(host);
         return code.toString();
     }
@@ -121,7 +121,7 @@ public class GameRestController {
     @GetMapping("/getAllPlayer/{code}")
     private String getAllPlayer(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
-        List<GamePlayer> players = playerToGameRepository.findAllByGame(game);
+        List<GamePlayer> players = gamePlayerRepository.findAllByGame(game);
         StringBuilder json = new StringBuilder();
         json.append("[");
         for (GamePlayer gamePlayer :players) {
@@ -136,7 +136,7 @@ public class GameRestController {
     @GetMapping("/clear-database")
     public void clearDatabase(){
         gameRepository.deleteAll();
-        pictureToGameRepository.deleteAll();
+        gamePictureRepository.deleteAll();
         playerRepository.deleteAll();
         settingRepository.deleteAll();
     }

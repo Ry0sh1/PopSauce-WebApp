@@ -21,21 +21,21 @@ public class MessageController {
     private final SettingRepository settingRepository;
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
-    private final PictureToGameRepository pictureToGameRepository;
-    private final PlayerToGameRepository playerToGameRepository;
+    private final GamePictureRepository gamePictureRepository;
+    private final GamePlayerRepository gamePlayerRepository;
 
     public MessageController(PictureRepository pictureRepository,
                              SettingRepository settingRepository,
                              GameRepository gameRepository,
                              PlayerRepository playerRepository,
-                             PictureToGameRepository pictureToGameRepository,
-                             PlayerToGameRepository playerToGameRepository) {
+                             GamePictureRepository gamePictureRepository,
+                             GamePlayerRepository gamePlayerRepository) {
         this.pictureRepository = pictureRepository;
         this.settingRepository = settingRepository;
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
-        this.pictureToGameRepository = pictureToGameRepository;
-        this.playerToGameRepository = playerToGameRepository;
+        this.gamePictureRepository = gamePictureRepository;
+        this.gamePlayerRepository = gamePlayerRepository;
     }
 
     @MessageMapping("/game.wrongAnswer/{gameCode}")
@@ -66,7 +66,7 @@ public class MessageController {
             }else {
                 playerRepository.save(newPlayer);
             }
-            playerToGameRepository.save(new GamePlayer(game,newPlayer, 0));
+            gamePlayerRepository.save(new GamePlayer(game,newPlayer, 0));
         }
         return message;
     }
@@ -89,20 +89,20 @@ public class MessageController {
     public Message addPoints(@Payload Message message){
         Player player = playerRepository.findByUsername(message.getSender());
         Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
-        GamePlayer gamePlayer = playerToGameRepository.findByPlayerAndGame(player,game);
+        GamePlayer gamePlayer = gamePlayerRepository.findByPlayerAndGame(player,game);
         gamePlayer.setPoints(gamePlayer.getPoints()+((Integer) message.getContent()));
         if (gamePlayer.getPoints()>=100){
             message.setMessageType(MessageType.END);
             message.setContent(message.getSender() + " won the Game");
             game.setStarted(false);
-            List<GamePlayer> allGamePlayer = playerToGameRepository.findAllByGame(game);
+            List<GamePlayer> allGamePlayer = gamePlayerRepository.findAllByGame(game);
             for (GamePlayer playerGame: allGamePlayer) {
                 playerGame.setPoints(0);
-                playerToGameRepository.save(playerGame);
+                gamePlayerRepository.save(playerGame);
             }
             gameRepository.save(game);
         }else {
-            playerToGameRepository.save(gamePlayer);
+            gamePlayerRepository.save(gamePlayer);
         }
         return message;
     }
@@ -112,7 +112,7 @@ public class MessageController {
     public Message playAgain(@Payload Message message){
 
         Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
-        pictureToGameRepository.deleteAll(pictureToGameRepository.findAllByGame(game));
+        gamePictureRepository.deleteAll(gamePictureRepository.findAllByGame(game));
 
         List<Picture> pictures = pictureRepository.findAllByCategory(game.getSetting().getCategory());
         //Shuffle The list
@@ -124,10 +124,10 @@ public class MessageController {
         }
         //Insert List
         for (int i = 0;i < pictures.size();i++){
-            pictureToGameRepository.save(new GamePicture(game,pictures.get(i),i));
+            gamePictureRepository.save(new GamePicture(game,pictures.get(i),i));
         }
 
-        game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
+        game.setCurrentPicture(gamePictureRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
         game.setCurrentTimer(game.getSetting().getGuessTimer()+game.getSetting().getResultTimer());
 
         game.setStarted(true);

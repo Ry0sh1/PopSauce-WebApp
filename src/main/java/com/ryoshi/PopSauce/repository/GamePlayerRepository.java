@@ -7,10 +7,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface PlayerToGameRepository extends CrudRepository<GamePlayer, Long> {
+public interface GamePlayerRepository extends CrudRepository<GamePlayer, Long> {
 
     List<GamePlayer> findAllByGame(Game game);
     GamePlayer findByPlayer(Player player);
     GamePlayer findByPlayerAndGame(Player players, Game game);
-
+    List<GamePlayer> findALlByPlayer(Player player);
 }
