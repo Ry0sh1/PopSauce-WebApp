@@ -54,6 +54,9 @@ public class WebSocketMessageSender {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         String gameCode = (String) headerAccessor.getSessionAttributes().get("gameCode");
+
+        System.out.println("Someone Disconnected");
+
         if (username != null) {
             System.out.println(username + " left the game");
             var chatMessage = Message.builder()

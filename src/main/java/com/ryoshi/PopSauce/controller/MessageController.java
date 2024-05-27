@@ -56,16 +56,11 @@ public class MessageController {
         if (message.getMessageType() == MessageType.JOIN){
             headerAccessor.getSessionAttributes().put("username",message.getSender());
             headerAccessor.getSessionAttributes().put("gameCode",message.getGameCode());
+
             Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
             Player newPlayer = new Player();
             newPlayer.setUsername(message.getSender());
-            if (playerRepository.findByUsername(message.getSender()) != null){
-                long id = playerRepository.findByUsername(message.getSender()).getId();
-                newPlayer.setId(id);
-                playerRepository.save(newPlayer);
-            }else {
-                playerRepository.save(newPlayer);
-            }
+            playerRepository.save(newPlayer);
             gamePlayerRepository.save(new GamePlayer(game,newPlayer, 0));
         }
         return message;
