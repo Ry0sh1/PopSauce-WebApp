@@ -1,5 +1,6 @@
 package com.ryoshi.PopSauce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Picture {
     private String rightGuess;
     private String difficulty;
     @OneToMany(mappedBy = "picture")
+    @JsonIgnore
     private List<GamePicture> gamePictures;
 
     public Picture(Long id, String category, String content, String rightGuess, String difficulty) {

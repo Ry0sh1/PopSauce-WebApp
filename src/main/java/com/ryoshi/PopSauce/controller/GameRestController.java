@@ -29,7 +29,6 @@ public class GameRestController {
     private final PlayerRepository playerRepository;
     private final PictureToGameRepository pictureToGameRepository;
     private final PlayerToGameRepository playerToGameRepository;
-
     public GameRestController(PictureRepository pictureRepository,
                               SettingRepository settingRepository,
                               GameRepository gameRepository,
