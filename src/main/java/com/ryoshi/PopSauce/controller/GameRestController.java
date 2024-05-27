@@ -160,54 +160,16 @@ public class GameRestController {
 
     @GetMapping("/insert-anime-data-into-database")
     public void test(){
-        List<File> files = ImageFactory.getFilesInFolder(new File("src/main/resources/pictures/animes"));
-        List<String> rightGuesses = new ArrayList<>();
-        rightGuesses.add("Attack on Titan,AoT");
-        rightGuesses.add("Attack on Titan,AoT");
-        rightGuesses.add("Black Butler");
-        rightGuesses.add("Bleach");
-        rightGuesses.add("Bleach");
-        rightGuesses.add("Chihiros Reise ins Zauberland");
-        rightGuesses.add("Chihiros Reise ins Zauberland");
-        rightGuesses.add("Clannad");
-        rightGuesses.add("Clannad");
-        rightGuesses.add("Code Geass");
-        rightGuesses.add("Code Geass");
-        rightGuesses.add("Cowboy Bepop");
-        rightGuesses.add("Cowboy Bepop");
-        rightGuesses.add("Demon Slayer");
-        rightGuesses.add("Demon Slayer");
-        rightGuesses.add("Fruits Basket");
-        rightGuesses.add("Fruits Basket");
-        rightGuesses.add("Fullmetal Alchemist Brotherhood");
-        rightGuesses.add("Fullmetal Alchemist Brotherhood");
-        rightGuesses.add("Gintama");
-        rightGuesses.add("Gintama");
-        rightGuesses.add("Haikyuu");
-        rightGuesses.add("Hajime No Ippo");
-        rightGuesses.add("Hajime No Ippo");
-        rightGuesses.add("Hunter x Hunter");
-        rightGuesses.add("Hunter x Hunter");
-        rightGuesses.add("Kaguya Sama");
-        rightGuesses.add("Kaguya Sama");
-        rightGuesses.add("Made in Abyss");
-        rightGuesses.add("Made in Abyss");
-        rightGuesses.add("Mob Psycho");
-        rightGuesses.add("Prinzessin Mononoke");
-        rightGuesses.add("Prinzessin Mononoke");
-        rightGuesses.add("One Piece");
-        rightGuesses.add("One Piece");
-        rightGuesses.add("Oshi no ko");
-        rightGuesses.add("Oshi no ko");
-        rightGuesses.add("Steins Gate");
-        rightGuesses.add("Steins Gate");
-        rightGuesses.add("Vinland Saga");
-        rightGuesses.add("Vinland Saga");
-        rightGuesses.add("Violet Evergarden");
-        try {
-            insertIntoDB(files,rightGuesses,"Anime");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        File[] directories = new File("src/main/resources/pictures/animes").listFiles(File::isDirectory);
+        for (File directory : directories){
+            List<File> files = ImageFactory.getFilesInFolder(directory);
+            for (File file : files){
+                try {
+                    insertIntoDB(file, directory.getName(), "Anime");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
@@ -325,6 +287,12 @@ public class GameRestController {
             pictureRepository.save(pic);
             counter++;
         }
+    }
+    private void insertIntoDB(File file, String right_guess,String Category) throws IOException {
+        byte[] imageData = ImageFactory.getImageAsBytes(file);
+        String base64Image = Base64.getEncoder().encodeToString(imageData);
+        Picture pic = new Picture(Category,base64Image,right_guess);
+        pictureRepository.save(pic);
     }
     private void insertIntoDB(BufferedImage image, String category, String right_guess, String difficulty) throws IOException {
         byte[] imageData = ImageFactory.getImageAsBytes(image);
