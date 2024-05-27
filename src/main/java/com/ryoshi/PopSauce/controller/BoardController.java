@@ -1,6 +1,6 @@
 package com.ryoshi.PopSauce.controller;
 
-import com.ryoshi.PopSauce.entity.Pictures;
+import com.ryoshi.PopSauce.entity.Picture;
 import com.ryoshi.PopSauce.entity.Player;
 import com.ryoshi.PopSauce.entity.Setting;
 import com.ryoshi.PopSauce.factory.ImageFactory;
@@ -63,7 +63,7 @@ public class BoardController {
     private void insertIntoDB(BufferedImage image, String category, String right_guess, String difficulty) throws IOException {
         byte[] imageData = ImageFactory.getImageAsBytes(image);
         String base64Image = Base64.getEncoder().encodeToString(imageData);
-        Pictures pic = new Pictures(category,base64Image,right_guess, difficulty);
+        Picture pic = new Picture(category,base64Image,right_guess, difficulty);
         pictureRepository.save(pic);
     }
 
@@ -71,8 +71,8 @@ public class BoardController {
     public String getCreateGameWindow(Model model){
         model.addAttribute("settings", new Setting());
         HashSet<String> categories = new HashSet<>();
-        Iterable<Pictures> allPictures = pictureRepository.findAll();
-        for (Pictures p:allPictures) {
+        Iterable<Picture> allPictures = pictureRepository.findAll();
+        for (Picture p:allPictures) {
             categories.add(p.getCategory());
         }
         model.addAttribute("categories",categories);

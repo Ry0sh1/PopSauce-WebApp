@@ -2,10 +2,10 @@ package com.ryoshi.PopSauce.controller;
 
 import com.google.gson.Gson;
 import com.ryoshi.PopSauce.entity.Game;
-import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGame;
-import com.ryoshi.PopSauce.entity.Pictures;
+import com.ryoshi.PopSauce.entity.GamePicture;
+import com.ryoshi.PopSauce.entity.Picture;
 import com.ryoshi.PopSauce.entity.Player;
-import com.ryoshi.PopSauce.entity.PlayerToGame.PlayerToGame;
+import com.ryoshi.PopSauce.entity.GamePlayer;
 import com.ryoshi.PopSauce.repository.PlayerToGameRepository;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.*;
@@ -59,9 +59,9 @@ public class GameRestController {
     public String getCurrentPicture(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
         if (game.getCurrentPicture() == null){
-            game.setCurrentPicture(pictureToGameRepository.findByGamesAndPlace(game,0).orElseThrow().getPictures());
+            game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
         }
-        Pictures currentPicture = game.getCurrentPicture();
+        Picture currentPicture = game.getCurrentPicture();
         Gson gson = new Gson();
         return gson.toJson(currentPicture);
     }
@@ -96,24 +96,24 @@ public class GameRestController {
         game.setCurrentPicture(null);
         gameRepository.save(game);
 
-        List<Pictures> pictures = pictureRepository.findAllByCategory(game.getSetting().getCategory());
+        List<Picture> pictures = pictureRepository.findAllByCategory(game.getSetting().getCategory());
         //Shuffle The list
         for (int i = 0;i<pictures.size();i++){
-            Pictures first = pictures.get(i);
+            Picture first = pictures.get(i);
             int random = (int) (Math.floor(Math.random()*pictures.size()));
             pictures.set(i,pictures.get(random));
             pictures.set(random,first);
         }
         //Insert List
         for (int i = 0;i < pictures.size();i++){
-            pictureToGameRepository.save(new PictureToGame(game,pictures.get(i),i));
+            pictureToGameRepository.save(new GamePicture(game,pictures.get(i),i));
         }
 
-        game.setCurrentPicture(pictureToGameRepository.findByGamesAndPlace(game,0).orElseThrow().getPictures());
+        game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
         gameRepository.save(game);
 
         //Set Up the host
-        playerToGameRepository.save(new PlayerToGame(game,host, 0));
+        playerToGameRepository.save(new GamePlayer(game,host, 0));
         playerRepository.save(host);
         return code.toString();
     }
@@ -121,11 +121,11 @@ public class GameRestController {
     @GetMapping("/getAllPlayer/{code}")
     private String getAllPlayer(@PathVariable String code){
         Game game = gameRepository.findByCode(code).orElseThrow();
-        List<PlayerToGame> players = playerToGameRepository.findAllByGame(game);
+        List<GamePlayer> players = playerToGameRepository.findAllByGame(game);
         StringBuilder json = new StringBuilder();
         json.append("[");
-        for (PlayerToGame playerToGame:players) {
-            json.append("{\"username\":\"").append(playerToGame.getPlayers().getUsername()).append("\",\"points\":").append(playerToGame.getPoints()).append("},");
+        for (GamePlayer gamePlayer :players) {
+            json.append("{\"username\":\"").append(gamePlayer.getPlayer().getUsername()).append("\",\"points\":").append(gamePlayer.getPoints()).append("},");
         }
         json.deleteCharAt(json.length()-1);
         json.append("]");
@@ -301,7 +301,7 @@ public class GameRestController {
         for (File file:files) {
             byte[] imageData = ImageFactory.getImageAsBytes(file);
             String base64Image = Base64.getEncoder().encodeToString(imageData);
-            Pictures pic = new Pictures(Category,base64Image,right_guess.get(counter), difficulty.get(counter));
+            Picture pic = new Picture(Category,base64Image,right_guess.get(counter), difficulty.get(counter));
             pictureRepository.save(pic);
             counter++;
         }
@@ -311,7 +311,7 @@ public class GameRestController {
         for (File file:files) {
             byte[] imageData = ImageFactory.getImageAsBytes(file);
             String base64Image = Base64.getEncoder().encodeToString(imageData);
-            Pictures pic = new Pictures(Category,base64Image,right_guess.get(counter), difficulty);
+            Picture pic = new Picture(Category,base64Image,right_guess.get(counter), difficulty);
             pictureRepository.save(pic);
             counter++;
         }
@@ -321,7 +321,7 @@ public class GameRestController {
         for (File file:files) {
             byte[] imageData = ImageFactory.getImageAsBytes(file);
             String base64Image = Base64.getEncoder().encodeToString(imageData);
-            Pictures pic = new Pictures(Category,base64Image,right_guess.get(counter));
+            Picture pic = new Picture(Category,base64Image,right_guess.get(counter));
             pictureRepository.save(pic);
             counter++;
         }
@@ -329,7 +329,7 @@ public class GameRestController {
     private void insertIntoDB(BufferedImage image, String category, String right_guess, String difficulty) throws IOException {
         byte[] imageData = ImageFactory.getImageAsBytes(image);
         String base64Image = Base64.getEncoder().encodeToString(imageData);
-        Pictures pic = new Pictures(category,base64Image,right_guess, difficulty);
+        Picture pic = new Picture(category,base64Image,right_guess, difficulty);
         pictureRepository.save(pic);
     }
 

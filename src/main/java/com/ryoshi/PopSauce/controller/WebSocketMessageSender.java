@@ -4,7 +4,6 @@ import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Message;
 import com.ryoshi.PopSauce.entity.MessageType;
 import com.ryoshi.PopSauce.entity.Player;
-import com.ryoshi.PopSauce.entity.PlayerToGame.PlayerToGameId;
 import com.ryoshi.PopSauce.repository.*;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -65,17 +64,17 @@ public class WebSocketMessageSender {
                     .build();
             Game game = gameRepository.findByCode(gameCode).orElseThrow();
             Player player = playerRepository.findByUsername(username);
-            playerToGameRepository.deleteById(new PlayerToGameId(player,game));
+            playerToGameRepository.deleteById(player.getId());
             playerRepository.delete(player);
             if (playerToGameRepository.findAllByGame(game).size() == 0){
                 settingRepository.delete(game.getSetting());
                 game.setHost(null);
                 game.setSetting(null);
-                pictureToGameRepository.deleteAll(pictureToGameRepository.findAllByGames(game));
+                pictureToGameRepository.deleteAll(pictureToGameRepository.findAllByGame(game));
                 gameRepository.delete(game);
             }
             if (game.getHost() == player){
-                game.setHost(playerToGameRepository.findAllByGame(game).get(0).getPlayers());
+                game.setHost(playerToGameRepository.findAllByGame(game).get(0).getPlayer());
             }
             messagingTemplate.convertAndSend("/start-game/game/"+game.getCode(), chatMessage);
         }

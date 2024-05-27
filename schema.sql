@@ -34,7 +34,9 @@ CREATE TABLE IF NOT EXISTS pictures_games(
     pictures_id BIGINT,
     games_id BIGINT,
     place int,
-    PRIMARY KEY (pictures_id,games_id)
+    PRIMARY KEY (pictures_id,games_id),
+    FOREIGN KEY (games_id) REFERENCES game(id),
+    FOREIGN KEY (pictures_id) REFERENCES pictures(id)
 );
 CREATE TABLE IF NOT EXISTS game_players(
     players_id BIGINT,
@@ -43,7 +45,5 @@ CREATE TABLE IF NOT EXISTS game_players(
     PRIMARY KEY (players_id,game_id)
 );
 
-ALTER TABLE pictures_games ADD FOREIGN KEY (pictures_id) REFERENCES pictures(id);
-ALTER TABLE pictures_games ADD FOREIGN KEY (games_id) REFERENCES game(id);
 ALTER TABLE game_players ADD FOREIGN KEY (players_id) REFERENCES player(id);
 ALTER TABLE game_players ADD FOREIGN KEY (game_id) REFERENCES game(id);

@@ -4,7 +4,7 @@ import com.ryoshi.PopSauce.controller.MessageController;
 import com.ryoshi.PopSauce.controller.WebSocketMessageSender;
 import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Message;
-import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGame;
+import com.ryoshi.PopSauce.entity.GamePicture;
 import com.ryoshi.PopSauce.repository.GameRepository;
 import com.ryoshi.PopSauce.repository.PictureToGameRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,13 +31,13 @@ public class TimerService {
         List<Game> games = gameRepository.findAllByStarted(true);
         for (Game game:games) {
             if (game.getCurrentTimer()==0){
-                PictureToGame picture = pictureToGameRepository.findByGamesAndPictures(game, game.getCurrentPicture()).orElseThrow();
+                GamePicture picture = pictureToGameRepository.findByGameAndPicture(game, game.getCurrentPicture()).orElseThrow();
                 int newPlace = picture.getPlace() + 1;
-                int amountOfPictures = pictureToGameRepository.findAllByGames(game).size();
+                int amountOfPictures = pictureToGameRepository.findAllByGame(game).size();
                 if (newPlace<amountOfPictures){
-                    game.setCurrentPicture(pictureToGameRepository.findByGamesAndPlace(game,newPlace).orElseThrow().getPictures());
+                    game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,newPlace).orElseThrow().getPicture());
                 }else {
-                    game.setCurrentPicture(pictureToGameRepository.findByGamesAndPlace(game,0).orElseThrow().getPictures());
+                    game.setCurrentPicture(pictureToGameRepository.findByGameAndPlace(game,0).orElseThrow().getPicture());
                 }
                 gameRepository.save(game);
                 game.setCurrentTimer(game.getSetting().getGuessTimer()+game.getSetting().getResultTimer());

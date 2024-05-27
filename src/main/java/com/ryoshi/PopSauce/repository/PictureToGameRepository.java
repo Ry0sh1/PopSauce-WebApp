@@ -1,20 +1,19 @@
 package com.ryoshi.PopSauce.repository;
 
 import com.ryoshi.PopSauce.entity.Game;
-import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGame;
-import com.ryoshi.PopSauce.entity.PictureToGame.PictureToGameId;
-import com.ryoshi.PopSauce.entity.Pictures;
+import com.ryoshi.PopSauce.entity.GamePicture;
+import com.ryoshi.PopSauce.entity.Picture;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PictureToGameRepository extends CrudRepository<PictureToGame, PictureToGameId> {
+public interface PictureToGameRepository extends CrudRepository<GamePicture, Long> {
 
-    List<PictureToGame> findAllByGames(Game game);
-    Optional<PictureToGame> findByGamesAndPlace(Game game, int place);
-    Optional<PictureToGame> findByGamesAndPictures(Game game, Pictures picture);
+    List<GamePicture> findAllByGame(Game game);
+    Optional<GamePicture> findByGameAndPlace(Game game, int place);
+    Optional<GamePicture> findByGameAndPicture(Game game, Picture picture);
 
-    int findMaxPlaceByGames(Game games);
+    int findMaxPlaceByGame(Game games);
 
 }
