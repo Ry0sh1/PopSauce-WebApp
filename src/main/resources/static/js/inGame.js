@@ -135,7 +135,7 @@ function refreshTimer(){
 
 //Start WebSocket Connection
 function connect(){
-    let socket = new SockJS("/ws");
+    let socket = new SockJS("https://popsauce-webapp-production.up.railway.app/ws");
     stompClient = Stomp.over(socket);
     stompClient.connect({},onConnected,onError);
 }
