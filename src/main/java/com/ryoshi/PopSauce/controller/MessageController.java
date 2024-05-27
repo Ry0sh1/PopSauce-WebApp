@@ -60,8 +60,10 @@ public class MessageController {
             Game game = gameRepository.findByCode(message.getGameCode()).orElseThrow();
             Player newPlayer = new Player();
             newPlayer.setUsername(message.getSender());
-            playerRepository.save(newPlayer);
-            gamePlayerRepository.save(new GamePlayer(game,newPlayer, 0));
+            if (playerRepository.findByUsername(message.getSender()) == null){
+                playerRepository.save(newPlayer);
+                gamePlayerRepository.save(new GamePlayer(game,newPlayer, 0));
+            }
         }
         return message;
     }

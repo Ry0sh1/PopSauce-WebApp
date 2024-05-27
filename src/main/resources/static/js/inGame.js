@@ -144,13 +144,12 @@ function onError(){
 }
 function onConnected(){
     stompClient.subscribe("/start-game/game/"+code, onMessageReceived);
-    /*
+
     stompClient.send("/app/game.join/"+code,
         {},
         JSON.stringify({gameCode:code,sender:username,messageType:'JOIN'})
     );
 
-     */
     fetchPlayers();
     fetchStatus();
 }

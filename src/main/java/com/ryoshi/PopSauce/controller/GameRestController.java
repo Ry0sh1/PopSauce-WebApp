@@ -10,6 +10,7 @@ import com.ryoshi.PopSauce.repository.GamePlayerRepository;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.*;
 import org.springframework.lang.NonNull;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.image.BufferedImage;
