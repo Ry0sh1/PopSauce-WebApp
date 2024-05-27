@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/home.css">
   <link rel="stylesheet" href="/css/root.css">
 </head>
 <body>
-<div class="content">
-  <h1 class="home-header">Pop Sauce</h1>
-  <p class="home-game-description">
-    Die Größe der Affen schwankt zwischen dem Zwergseidenäffchen,
-    mit einer Kopf-Rumpf-Länge von rund 12 bis 15 Zentimetern und
-    einem Gewicht von rund 100 Gramm, und den Gorillas, die stehend
-    bis zu 1,75 Meter hoch werden und ein Gewicht von 200 Kilogramm
-    erreichen können, sowie den Menschen mit einer Körpergröße von
-    durchschnittlich 1,60 bis 1,80 Metern, in Einzelfällen auch mehr
-    als 2,00 Metern. Einige Arten haben einen ausgeprägten
-    Geschlechtsdimorphismus, wobei die Männchen mancher Arten doppelt
-    so schwer wie die Weibchen sein können und sich auch in der Fellfarbe
-    unterscheiden können. Ihr Körper ist meist mit Fell bedeckt, dessen
-    Färbung von schwarz über verschiedene Braun- und Grautöne bis zu weiß
-    variieren kann. Die Handflächen und Fußsohlen sind meistens unbehaart,
-    manchmal auch das Gesicht. Die Augen sind groß und nach vorn gerichtet,
-    womit ein guter Gesichtssinn einhergeht. Als Trockennasenprimaten ist
-    ihr Geruchssinn hingegen unterentwickelt.
-  </p>
-  <div class="home-username-field">
+<div class="container text-center" style="background-color: var(--background-color-light)">
+  <h1>Pop Sauce</h1>
+  <h2>Diese App wurde von Ryoshi entwickelt.</h2>
+  <div class="w-75 m-auto">
+    <p>
+      Da ich diese Application vor dem Publishen auf ein anderes Data bank Management System wechseln musste, musste ich
+      große Teile des Codes neu schreiben und reworken. Dementsprechend gibt es noch sehr viele Bugs, an denen ich allerdings
+      bereits arbeite. Zudem kamen noch schwierigkeiten mit dem Publishen der Seite auf Railway weswegen die vorher verwendete
+      Methode zum Speichern der Daten nicht mehr funktionierte. Zurzeit funktioniert also nur die Anime-Kategorie. Weitere Probleme
+      wie lange Ladezeiten beim Starten von Games, plötzliches aufhören, wenn keine Bilder mehr da sind und das nicht funktionierende
+      Uploads sind bereits bekannt.
+    </p>
+    <h4>
+      Zurzeit ist diese App nicht einmal im Early Access! Zum spielen ist die Application noch nicht geeignet und ich rate dringend
+      davon ab!
+    </h4>
+  </div>
+
+  <div class="d-flex-center flex-column mt-5">
     <label for="input-username">Select Username:</label>
     <div>
       <input class="home-input" id="input-username" type="text">
@@ -65,5 +65,6 @@
   </div>
 </div>
 <script src="/js/home.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -14,27 +14,12 @@ body::-webkit-scrollbar-thumb{
   background-color: var(--field-color);
   border-radius: 100px;
 }
-.content{
-  width: 860px;
-  background-color: var(--background-color-light);
-  margin: 0 auto 0 auto;
-  padding: 6px 32px;
-  box-shadow: 0 0 6px black;
-}
 h1, p, button, div, input, label, h2{
   font-family: Arial,serif;
   color: var(--font-color);
 }
-.home-header{
-  font-size: 42px;
-  font-weight: bold;
-  text-align: center;
-}
-.home-game-description{
-  margin-top: 60px;
-  text-align: center;
-  line-height: 24px;
-  font-size: 18px;
+h1,h2,h3,h4,h5,h6{
+  font-weight: 800;
 }
 .home-button{
   background-color: #7bb622;
@@ -71,8 +56,7 @@ h1, p, button, div, input, label, h2{
   justify-content: end;
   align-items: center;
 }
-.home-username-field{
-  margin-top: 40px;
+.d-flex-center{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,12 +68,6 @@ h1, p, button, div, input, label, h2{
   z-index: -2;
 }
 .invisible{
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  font-size: 0 !important;
   display: none !important;
 }
 #invalid-code,#invalid-username,#invalid-image{
