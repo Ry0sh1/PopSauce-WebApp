@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 @RestController
+@CrossOrigin
 public class GameRestController {
 
     private final PictureRepository pictureRepository;

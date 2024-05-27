@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 @Controller
 @RequestMapping("")
+@CrossOrigin
 public class BoardController {
 
     private final GameRepository gameRepository;
