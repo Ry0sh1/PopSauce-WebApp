@@ -13,16 +13,20 @@
   <h2>Diese App wurde von Ryoshi entwickelt.</h2>
   <div class="w-75 m-auto">
     <p>
-      Da ich diese Application vor dem Publishen auf ein anderes Data bank Management System wechseln musste, musste ich
-      große Teile des Codes neu schreiben und reworken. Dementsprechend gibt es noch sehr viele Bugs, an denen ich allerdings
-      bereits arbeite. Zudem kamen noch schwierigkeiten mit dem Publishen der Seite auf Railway weswegen die vorher verwendete
-      Methode zum Speichern der Daten nicht mehr funktionierte. Zurzeit funktioniert also nur die Anime-Kategorie. Weitere Probleme
-      wie lange Ladezeiten beim Starten von Games, plötzliches aufhören, wenn keine Bilder mehr da sind und das nicht funktionierende
-      Uploads sind bereits bekannt.
+      Diese Application wurde im Backend mit Spring Boot und als Datenbank Management System wurde sich final für Postgres entschieden
+      allerdings lief das Programm vorher schon auf H2. Über EndPoints und WebSockets ist das Backend mit dem Frontend verbunden der
+      ganz einfach mit JavaScript HTML und CSS implementiert wurde.
+
+      Diese Web Application ist inspiriert von der Popsauce Game aus JKLM.fun. Diese Application ist nicht dafür gedacht
+      damit man mit ihr Spielen kann (auch wenn es natürlich möglich ist), sondern eher um meine Kenntnisse zu demonstrieren.
+      Dementsprechend ist das Design nicht durchdacht und es gibt aktuell auch nur eine Kategorie, und zwar Animes mit etwa 40
+      Bildern, wenn du Lust hast deine eigene Sammlung an Bildern und Kategorien zu verwenden kannst du mein GitHub Projekt forken und unter resources/pictures deine eigenen Bilder
+      unterbringen. Dabei solltest du folgende Struktur beachten: "resources/pictures/category/rightGuess/picture" Der right
+      guess wird nicht auf Groß- und Kleinschreibung überprüft ein Right Guess könnte zum Beispiel so aussehen "König der Löwen,Lion King"
+      Jeder right Guess wird mit einem Komma getrennt und der erste Right guess ist das Wort, was bei der Lösung oben am Ende steht.
     </p>
     <h4>
-      Zurzeit ist diese App nicht einmal im Early Access! Zum spielen ist die Application noch nicht geeignet und ich rate dringend
-      davon ab!
+      Early Access!
     </h4>
   </div>
 

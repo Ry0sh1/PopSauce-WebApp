@@ -161,12 +161,21 @@ public class GameRestController {
 
     @GetMapping("/insert-anime-data-into-database")
     public void test(){
-        File[] directories = new File("src/main/resources/pictures/animes").listFiles(File::isDirectory);
+        insertDirectoryDateIntoDatabase("src/main/resources/pictures/animes","anime");
+    }
+
+    @GetMapping("/insert-disney-data-into-database")
+    public void insertDisney(){
+        insertDirectoryDateIntoDatabase("src/main/resources/pictures/disney","disney");
+    }
+
+    public void insertDirectoryDateIntoDatabase(String pathname, String category){
+        File[] directories = new File(pathname).listFiles(File::isDirectory);
         for (File directory : directories){
             List<File> files = ImageFactory.getFilesInFolder(directory);
             for (File file : files){
                 try {
-                    insertIntoDB(file, directory.getName(), "Anime");
+                    insertIntoDB(file, directory.getName(), category);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
