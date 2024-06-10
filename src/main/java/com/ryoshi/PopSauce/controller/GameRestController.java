@@ -9,6 +9,11 @@ import com.ryoshi.PopSauce.entity.GamePlayer;
 import com.ryoshi.PopSauce.repository.GamePlayerRepository;
 import com.ryoshi.PopSauce.factory.ImageFactory;
 import com.ryoshi.PopSauce.repository.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.lang.NonNull;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 @RestController
@@ -30,18 +36,20 @@ public class GameRestController {
     private final PlayerRepository playerRepository;
     private final GamePictureRepository gamePictureRepository;
     private final GamePlayerRepository gamePlayerRepository;
+    private final ResourceLoader resourceLoader;
     public GameRestController(PictureRepository pictureRepository,
                               SettingRepository settingRepository,
                               GameRepository gameRepository,
                               PlayerRepository playerRepository,
                               GamePictureRepository gamePictureRepository,
-                              GamePlayerRepository gamePlayerRepository) {
+                              GamePlayerRepository gamePlayerRepository, ApplicationContext applicationContext, ResourceLoader resourceLoader) {
         this.pictureRepository = pictureRepository;
         this.settingRepository = settingRepository;
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.gamePictureRepository = gamePictureRepository;
         this.gamePlayerRepository = gamePlayerRepository;
+        this.resourceLoader = resourceLoader;
     }
 
     @GetMapping("/is-code-valid/{code}")
@@ -161,7 +169,7 @@ public class GameRestController {
 
     @GetMapping("/insert-anime-data-into-database")
     public void test(){
-        insertDirectoryDateIntoDatabase("src/main/resources/pictures/animes","anime");
+        insertDirectoryDateIntoDatabase("/pictures/animes","anime");
     }
 
     @GetMapping("/insert-disney-data-into-database")
@@ -170,17 +178,35 @@ public class GameRestController {
     }
 
     public void insertDirectoryDateIntoDatabase(String pathname, String category){
-        File[] directories = new File(pathname).listFiles(File::isDirectory);
-        for (File directory : directories){
-            List<File> files = ImageFactory.getFilesInFolder(directory);
-            for (File file : files){
-                try {
-                    insertIntoDB(file, directory.getName(), category);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+
+
+        try {
+            String directoryPath = "animes";
+            File directory = new File(directoryPath);
+            if (directory.exists() && directory.isDirectory()) {
+                List<File> directories = new ArrayList<>();
+                directories.addAll(Arrays.asList(directory.listFiles()));
+                System.out.println(directories.size());
+
+                for (File dir : directories){
+                    List<File> files = ImageFactory.getFilesInFolder(dir);
+                    for (File file : files){
+                        try {
+                            insertIntoDB(file, dir.getName(), category);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
+
+            } else {
+                throw new IOException("Verzeichnis '" + directoryPath + "' nicht gefunden oder kein Verzeichnis.");
             }
+        }catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+
     }
 
     @GetMapping("/download-flag-data")
