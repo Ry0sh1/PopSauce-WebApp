@@ -2,12 +2,12 @@
 let username;
 function createGame(){
     username = document.getElementById('input-username').value;
-    fetch("/is-username-valid/"+username)
+    fetch("/popsauce/is-username-valid/"+username)
         .then(response=> response.text())
         .then(data => {
             if (data === "true"){
                 localStorage.setItem('username',username);
-                window.location.href = "/create-game";
+                window.location.href = "/popsauce/create-game";
             }else {
                 document.getElementById('invalid-username').classList.remove('invisible');
                 document.getElementById('input-username').value = '';
@@ -17,11 +17,11 @@ function createGame(){
 function joinGame(){
     let code = document.getElementById('input-code').value;
     username = document.getElementById('input-username').value;
-    fetch("/is-username-valid/"+username)
+    fetch("/popsauce/is-username-valid/"+username)
         .then(response=> response.text())
         .then(data => {
             if (data === "true"){
-                fetch("/is-code-valid/"+code)
+                fetch("/popsauce/is-code-valid/"+code)
                     .then(response=> response.text())
                     .then(data => {
                         if (data==="false"){
@@ -30,7 +30,7 @@ function joinGame(){
                             document.getElementById('invalid-username').classList.add('invisible');
                         }else {
                             localStorage.setItem('username',username);
-                            window.location.href = "/start-game/" + code;
+                            window.location.href = "/popsauce/start-game/" + code;
                         }
                     })
             }else {

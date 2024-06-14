@@ -1,4 +1,4 @@
-package com.ryoshi.PopSauce.controller;
+package com.ryoshi.PopSauce.controller.PopSauce;
 
 import com.ryoshi.PopSauce.entity.Picture;
 import com.ryoshi.PopSauce.entity.Player;
@@ -20,7 +20,7 @@ import java.util.Base64;
 import java.util.HashSet;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/popsauce")
 @CrossOrigin
 public class BoardController {
 
@@ -58,7 +58,7 @@ public class BoardController {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        return "home";
+        return "popsauce/home";
     }
 
     private void insertIntoDB(BufferedImage image, String category, String right_guess, String difficulty) throws IOException {
@@ -77,19 +77,19 @@ public class BoardController {
             categories.add(p.getCategory());
         }
         model.addAttribute("categories",categories);
-        return "create-game";
+        return "popsauce/create-game";
     }
 
     @GetMapping("/start-game/{code}")
     public String startGame(@PathVariable String code, Model model){
         model.addAttribute("game",gameRepository.findByCode(code));
-        return "in-game";
+        return "popsauce/in-game";
     }
 
     @GetMapping("")
     public String showHome(Model model){
         model.addAttribute("player",new Player());
-        return "home";
+        return "popsauce/home";
     }
 
     @PostMapping("/set-username")

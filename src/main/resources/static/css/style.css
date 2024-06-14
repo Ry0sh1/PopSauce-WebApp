@@ -1,0 +1,42 @@
+html, body{
+  background-color: #f0f0f0 !important;
+}
+h1, h2, h3, h4, h5, h6, button, div, p{
+  font-family: "Tiny5", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+#play{
+  padding: 12px 30px;
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: #7878de;
+  border: none;
+  cursor: pointer;
+  box-shadow: 2px 2px 14px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.15s;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+#play:hover{
+  opacity: 0.8;
+}
+#play:active{
+  opacity: 0.6;
+}
+.image-container img{
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+}
+
+.image-container{
+  border: rgba(0, 0, 0, 0.7) solid 1px;
+  cursor: pointer;
+  transition: all 0.05s;
+  border-radius: 8px;
+}
+.image-container:hover{
+  box-shadow: 0 30px 10px 15px rgba(255, 216, 110, 0.2);
+  transform: translateY(-8px);
+}

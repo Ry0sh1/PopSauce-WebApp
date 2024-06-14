@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+    <title>Frogger</title>
+    <link rel="stylesheet" href="/css/frogger/style.css">
+    <link rel="stylesheet" href="/css/norm.css">
+</head>
+<body>
+<h1 id="game-title">Frogger by Ryoshi!</h1>
+<div class="d-flex-row">
+    <h1 id="level-container" class="hidden">Level: <span id="level">1</span></h1>
+    <h1>Highscore: <span id="high-score">1</span></h1>
+</div>
+<div class="d-flex-row">
+    <button id="play">Play</button>
+    <button id="resume">Resume HighScore</button>
+</div>
+<canvas id="game-canvas" class="hidden" width="600px" height="600px"></canvas>
+<script src="/javascript/frogger/car.js"></script>
+<script src="/javascript/frogger/street.js"></script>
+<script src="/javascript/frogger/script.js"></script>
+</body>
+</html>

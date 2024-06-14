@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+    <title>Flappy Bird</title>
+    <link rel="stylesheet" href="/css/flappyBird/style.css">
+    <link rel="stylesheet" href="/css/norm.css">
+</head>
+<body>
+<h1 id="game-title">Flappy Bird by Ryoshi!</h1>
+<div class="d-flex-row">
+    <h1 id="point-container" class="hidden">Score: <span id="points">0</span></h1>
+    <h1 id="high-score-container">High Score: <span id="high-score">0</span></h1>
+</div>
+<button id="play">Play</button>
+<h1 class="hidden" id="space-to-start">Press Space to Start and to Jump!</h1>
+<canvas id="game-canvas" width="400" height="600" class="hidden"></canvas>
+<h1 id="lose" class="hidden">Du hast Verloren!</h1>
+<script src="/javascript/flappyBird/script.js"></script>
+</body>
+</html>
