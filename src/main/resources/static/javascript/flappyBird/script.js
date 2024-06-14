@@ -30,6 +30,23 @@ const settings= {
 
 let obstacles = [];
 
+let lastTime = 0;
+const fps = 60;
+const fpsInterval = 1000 / fps;
+
+function gameLoop(currentTime){
+    if (!running) return;
+
+    requestAnimationFrame(gameLoop);
+
+    const elapsed = currentTime - lastTime;
+
+    if (elapsed > fpsInterval) {
+        lastTime = currentTime - (elapsed % fpsInterval);
+        update();
+        draw();
+    }
+}
 function update() {
     obstacles.forEach(obstacles => {
         obstacles.x = obstacles.x - settings.pipeSpeed
@@ -65,11 +82,6 @@ function update() {
         }
         points.innerText = `${currentPoints}`;
 
-    }
-
-    if (running){
-        draw();
-        requestAnimationFrame(update);
     }
 }
 function lose(){
@@ -120,7 +132,7 @@ function jump(forStart){
     if (forStart){
         spaceToStart.classList.add('hidden');
         running = true;
-        update();
+        requestAnimationFrame(gameLoop);
     }
     player.dy = -player.jumpForce;
 }

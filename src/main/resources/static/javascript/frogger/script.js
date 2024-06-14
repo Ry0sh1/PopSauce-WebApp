@@ -39,7 +39,20 @@ function generateStreets(){
         start -= 40;
     }
 }
+let lastTime = 0;
+const fps = 60;
+const fpsInterval = 1000 / fps;
 
+function gameLoop(currentTime){
+    requestAnimationFrame(gameLoop);
+
+    const elapsed = currentTime - lastTime;
+
+    if (elapsed > fpsInterval) {
+        lastTime = currentTime - (elapsed % fpsInterval);
+        update();
+    }
+}
 function update(){
     streets.forEach(street => {
         if (Math.random() < settings.carSpawnRate){
@@ -77,7 +90,6 @@ function update(){
         })
     }
     draw();
-    requestAnimationFrame(update);
 }
 function checkCollision(rect1, rect2) {
     return rect1.x < rect2.x + rect2.width &&
@@ -192,5 +204,5 @@ function buttonPress(){
         }
     })
     generateStreets();
-    update();
+    requestAnimationFrame(gameLoop);
 }

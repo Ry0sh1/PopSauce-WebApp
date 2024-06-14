@@ -7,7 +7,4 @@ document.getElementById('flappy-bird').addEventListener('click', e => {
 document.getElementById('tron').addEventListener('click', e => {
     window.location = "/tron";
 })
-document.getElementById('popsauce').addEventListener('click', e => {
-    window.location = "/popsauce";
-})
 console.log('Test')

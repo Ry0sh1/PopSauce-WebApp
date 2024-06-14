@@ -4,6 +4,7 @@ const playButton = document.getElementById('play');
 const gameTitle = document.getElementById('game-title');
 const lose = document.getElementById('lose');
 const explainSetting = document.getElementById('explain-setting');
+let running = false;
 
 const settings = {
     playerSpeed: 5,
@@ -27,21 +28,35 @@ document.addEventListener('keydown', e => {
     player2.keyUp(e.key);
 })
 
+let lastTime = 0;
+const fps = 60;
+const fpsInterval = 1000 / fps;
+function gameLoop(currentTime){
+    if (!running) return;
+
+    requestAnimationFrame(gameLoop);
+    const elapsed = currentTime - lastTime;
+
+    if (elapsed > fpsInterval) {
+        lastTime = currentTime - (elapsed % fpsInterval);
+        update();
+    }
+}
 function update(){
     player1.move(canvas);
     player2.move(canvas);
-
     if (player1.isTouching(player2.trail)){
         loseScreen();
         lose.innerText = "Player 2 hat gewonnen";
+        running = false;
     }
     else if (player2.isTouching(player1.trail)){
         loseScreen();
         lose.innerText = "Player 1 hat gewonnen";
+        running = false;
     }
     else {
         draw();
-        requestAnimationFrame(update);
     }
 }
 function draw(){
@@ -94,6 +109,7 @@ playButton.addEventListener('click', e => {
     explainSetting.classList.add('hidden');
     canvas.classList.remove('hidden');
     resetCanvas();
-    update();
+    requestAnimationFrame(gameLoop);
+    running = true;
 })
 

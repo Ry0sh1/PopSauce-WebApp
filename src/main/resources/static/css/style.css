@@ -1,7 +1,7 @@
 html, body{
   background-color: #f0f0f0 !important;
 }
-h1, h2, h3, h4, h5, h6, button, div, p{
+h1, h2, h3, h4, h5, h6, button, div, p, a{
   font-family: "Tiny5", sans-serif !important;
   font-weight: 400 !important;
   font-style: normal !important;
@@ -39,4 +39,13 @@ h1, h2, h3, h4, h5, h6, button, div, p{
 .image-container:hover{
   box-shadow: 0 30px 10px 15px rgba(255, 216, 110, 0.2);
   transform: translateY(-8px);
+}
+a{
+  transition: all 0.02s;
+}
+a:hover{
+  opacity: 0.8;
+}
+a:active{
+  opacity: 0.6;
 }
