@@ -1,10 +1,11 @@
 html, body{
-  background-color: #f0f0f0 !important;
+  background-color: #e3e3e3 !important;
 }
 h1, h2, h3, h4, h5, h6, button, div, p, a{
   font-family: "Tiny5", sans-serif !important;
   font-weight: 400 !important;
   font-style: normal !important;
+  color: #000000;
 }
 #play{
   padding: 12px 30px;

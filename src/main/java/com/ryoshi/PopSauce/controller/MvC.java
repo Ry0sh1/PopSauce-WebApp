@@ -33,4 +33,9 @@ public class MvC {
         return "frogger/frogger";
     }
 
+    @GetMapping("/space-invader")
+    public String getSpaceInvader(){
+        return "spaceInvader/spaceInvader";
+    }
+
 }

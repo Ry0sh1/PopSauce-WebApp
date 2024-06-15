@@ -7,4 +7,7 @@ document.getElementById('flappy-bird').addEventListener('click', e => {
 document.getElementById('tron').addEventListener('click', e => {
     window.location = "/tron";
 })
+document.getElementById('space-invader').addEventListener('click', e => {
+    window.location = "/space-invader";
+})
 console.log('Test')
