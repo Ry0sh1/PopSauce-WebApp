@@ -10,4 +10,10 @@ document.getElementById('tron').addEventListener('click', e => {
 document.getElementById('space-invader').addEventListener('click', e => {
     window.location = "/space-invader";
 })
+document.getElementById('snake').addEventListener('click', e => {
+    window.location = "/snake";
+})
+document.getElementById('centipede').addEventListener('click', e => {
+    window.location = "/centipede";
+})
 console.log('Test')

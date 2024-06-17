@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ryoshi's Arcade - Snake</title>
+  <link rel="stylesheet" href="/css/norm.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+</head>
+<body>
+<h1 id="game-title">Snake by Ryoshi!</h1>
+<div class="d-flex-row">
+  <h1 id="point-container" class="hidden">Score: <span id="points">0</span></h1>
+  <h1 id="high-score-container">High Score: <span id="high-score">0</span></h1>
+</div>
+<button id="play">Play</button>
+<canvas class="hidden" width="600" height="600" id="game-canvas"></canvas>
+<h1 id="lose" class="hidden">Game over!</h1>
+<script src="/javascript/snake/script.js"></script>
+</body>
+</html>

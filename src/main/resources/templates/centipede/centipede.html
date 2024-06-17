@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ryoshi's Arcade - Centipede</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/centipede/style.css">
+  <link rel="stylesheet" href="/css/norm.css">
+</head>
+<body>
+<h1 id="game-title">Centipede by Ryoshi!</h1>
+<h2 id="game-description">
+  Pink blocks are Mushrooms. <span style="text-decoration: underline">Do not touch them! </span><br>
+  Grey blocks are spiders following your last position. <span style="text-decoration: underline">Do not touch them! </span><br>
+  Yellow blocks are worms creating Mushrooms. <span style="text-decoration: underline">Do not touch them! </span><br>
+  Move with <span style="text-decoration: underline">w,a,s,d</span> and shoot with <span style="text-decoration: underline">space</span>!
+</h2>
+<div class="d-flex-row">
+  <h1 id="hp-container" class="hidden">HP: <span id="hp">3</span></h1>
+  <h1 id="level-container" class="hidden">Level: <span id="level">1</span></h1>
+  <h1 id="high-score-container">High Score: <span id="high-score">1</span></h1>
+</div>
+<button id="play">Play</button>
+<canvas id="game-canvas" class="hidden" width="600" height="600"></canvas>
+<h1 id="hp-lose" class="hidden">You lost 1 HP! Press space to continue</h1>
+<h1 id="lose" class="hidden">Game Over!</h1>
+<script src="/javascript/centipede/model/spider.js"></script>
+<script src="/javascript/centipede/model/worm.js"></script>
+<script src="/javascript/centipede/model/centipede.js"></script>
+<script src="/javascript/centipede/model/bullet.js"></script>
+<script src="/javascript/centipede/model/player.js"></script>
+<script src="/javascript/centipede/model/mushroom.js"></script>
+<script src="/javascript/centipede/script.js"></script>
+</body>
+</html>

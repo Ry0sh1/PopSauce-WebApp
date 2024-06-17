@@ -38,4 +38,13 @@ public class MvC {
         return "spaceInvader/spaceInvader";
     }
 
+    @GetMapping("/snake")
+    public String getSnake(){
+        return "snake/snake";
+    }
+
+    @GetMapping("/centipede")
+    public String getCentipede(){
+        return "centipede/centipede";
+    }
 }
