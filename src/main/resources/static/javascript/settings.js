@@ -30,7 +30,7 @@ function setSettings(){
         "setting": settings,
     }
 
-    fetch('/popsauce/create', {
+    fetch('/create', {
         method: 'POST',
         headers:{
             'Accept': 'application/json',
@@ -39,7 +39,7 @@ function setSettings(){
         body: JSON.stringify(game)
     })
     .then(response => response.text())
-    .then(code => window.location.href = "/popsauce/start-game/" + code);
+    .then(code => window.location.href = "/start-game/" + code);
 
 }
 

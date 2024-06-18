@@ -298,14 +298,14 @@ function removePlayer(message){
 
 //Only for player who joins after the games started!!!
 function fetchTime(){
-    fetch("/popsauce/get-current-timer/"+code)
+    fetch("/get-current-timer/"+code)
         .then(response=>response.text())
         .then(data=>{
             timer = parseInt(data);
         })
 }
 function fetchPlayers(){
-    fetch("/popsauce/getAllPlayer/" + code)
+    fetch("/getAllPlayer/" + code)
         .then(response=>response.json())
         .then(data => {
             players = data;
@@ -316,7 +316,7 @@ function fetchPlayers(){
         });
 }
 function fetchStatus(){
-    fetch("/popsauce/is-started/" + code)
+    fetch("/is-started/" + code)
         .then(response=>response.text())
         .then(data => {
             if (data==='true'){
@@ -327,7 +327,7 @@ function fetchStatus(){
         });
 }
 function fetchCurrentPicture(){
-    fetch("/popsauce/get-current-picture/"+code)
+    fetch("/get-current-picture/"+code)
         .then(response=>response.json())
         .then(data=>{
             currentPicture = data;

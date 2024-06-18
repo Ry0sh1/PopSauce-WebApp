@@ -1,4 +1,4 @@
-package com.ryoshi.PopSauce.controller.PopSauce;
+package com.ryoshi.PopSauce.controller;
 
 import com.google.gson.Gson;
 import com.ryoshi.PopSauce.entity.Game;
@@ -28,7 +28,6 @@ import java.util.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/popsauce")
 public class GameRestController {
 
     private final PictureRepository pictureRepository;

@@ -1,4 +1,4 @@
-package com.ryoshi.PopSauce.controller.PopSauce;
+package com.ryoshi.PopSauce.controller;
 
 import com.ryoshi.PopSauce.entity.*;
 import com.ryoshi.PopSauce.entity.GamePicture;

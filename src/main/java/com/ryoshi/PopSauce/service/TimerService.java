@@ -1,7 +1,7 @@
 package com.ryoshi.PopSauce.service;
 
-import com.ryoshi.PopSauce.controller.PopSauce.MessageController;
-import com.ryoshi.PopSauce.controller.PopSauce.WebSocketMessageSender;
+import com.ryoshi.PopSauce.controller.MessageController;
+import com.ryoshi.PopSauce.controller.WebSocketMessageSender;
 import com.ryoshi.PopSauce.entity.Game;
 import com.ryoshi.PopSauce.entity.Message;
 import com.ryoshi.PopSauce.entity.GamePicture;
