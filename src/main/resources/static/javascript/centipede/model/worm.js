@@ -11,7 +11,7 @@ class Worm{
     move(){
         this.y += this.speed;
         this.mushRoomCountdown++;
-        if (this.mushRoomCountdown % 4 === 0){
+        if (this.mushRoomCountdown % 8 === 0){
             this.mushRoomCountdown = 0;
             this.ready = true;
         }

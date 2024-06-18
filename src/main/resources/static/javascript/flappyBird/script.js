@@ -59,6 +59,9 @@ function update() {
         player.y = canvas.height - player.height;
         lose();
     }
+    if (player.y < 0 - player.height) {
+        lose();
+    }
 
     obstacles.forEach(obstacle => {
         if (player.x < obstacle.x + obstacle.width &&

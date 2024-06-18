@@ -175,34 +175,46 @@ function buttonPress(){
     resumeButton.classList.add('hidden');
     canvas.classList.remove('hidden');
     levelContainer.classList.remove('hidden');
-    document.addEventListener('keypress', e => {
-        switch (e.key){
-            case 'w' : {
-                if (player.y >= player.speed){
-                    player.y -= player.speed;
+
+    const keyAvailable = {'w': true, 'a': true, 's': true, 'd': true};
+
+    document.addEventListener('keydown', e => {
+        if (keyAvailable[e.key]) {
+            switch (e.key) {
+                case 'w' : {
+                    if (player.y >= player.speed) {
+                        player.y -= player.speed;
+                        keyAvailable[e.key] = false;
+                    }
+                    break;
                 }
-                break;
-            }
-            case 'a': {
-                if (player.x >= player.speed){
-                    player.x -= player.speed;
+                case 'a': {
+                    if (player.x >= player.speed) {
+                        player.x -= player.speed;
+                        keyAvailable[e.key] = false;
+                    }
+                    break;
                 }
-                break;
-            }
-            case 's': {
-                if (player.y <= canvas.height - (player.speed + player.height)){
-                    player.y += player.speed;
+                case 's': {
+                    if (player.y <= canvas.height - (player.speed + player.height)) {
+                        player.y += player.speed;
+                        keyAvailable[e.key] = false;
+                    }
+                    break;
                 }
-                break;
-            }
-            case 'd': {
-                if (player.x <= canvas.width - (player.speed + player.height)){
-                    player.x += player.speed;
+                case 'd': {
+                    if (player.x <= canvas.width - (player.speed + player.height)) {
+                        player.x += player.speed;
+                        keyAvailable[e.key] = false;
+                    }
+                    break;
                 }
-                break;
             }
         }
     })
+    document.addEventListener('keyup', e => {
+        keyAvailable[e.key] = true;
+    });
     generateStreets();
     requestAnimationFrame(gameLoop);
 }

@@ -22,7 +22,7 @@ class Centipede{
         if (this.direction === 'a'){
             this.x -= this.speed;
         }
-        if (this.x < 0 || this.x === canvas.width){
+        if (this.x < 0 || this.x >= canvas.width){
             this.turn();
         }
     }
@@ -32,7 +32,7 @@ class Centipede{
     }
 
     turn(){
-        if (this.y + this.verticalSpeed === canvas.height || this.y + this.verticalSpeed === 0 - settings.gridSize){
+        if (this.y + this.verticalSpeed >= canvas.height || this.y + this.verticalSpeed < 0){
             this.verticalSpeed *= -1;
         }
         this.y += this.verticalSpeed;

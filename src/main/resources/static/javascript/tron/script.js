@@ -47,12 +47,12 @@ function update(){
     player2.move(canvas);
     if (player1.isTouching(player2.trail)){
         loseScreen();
-        lose.innerText = "Player 2 hat gewonnen";
+        lose.innerText = "Player 2 won!";
         running = false;
     }
     else if (player2.isTouching(player1.trail)){
         loseScreen();
-        lose.innerText = "Player 1 hat gewonnen";
+        lose.innerText = "Player 1 won!";
         running = false;
     }
     else {
